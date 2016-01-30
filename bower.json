@@ -1,0 +1,24 @@
+{
+  "name": "herod",
+  "authors": [
+    "Alexandre Gagnon <alxgnon@linux.com>",
+    "Nicolas Roy-Renaud <nroyrenaud@linux.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "GPL3",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "svg.js": "~2.2.5",
+    "jquery": "^2.2.0"
+  }
+}
