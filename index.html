@@ -6,11 +6,11 @@
   <link href="main.css" rel="stylesheet" type="text/css" media="all">
 
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="bower_components/angular/angular.min.js"></script>
-  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="bower_components/svg.js/dist/svg.min.js"></script>
 </head>
-<body>
+<body ng-app="herod">
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -20,7 +20,28 @@
     </div>
   </nav>
 
-  <div id="drawing"></div>
+  <div ng-controller="EcuCtrl" id="view-container" class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 panel panel-default">
+        <div class="panel-body">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Couleur</h3>
+            </div>
+            <div class="panel-body">
+              <div class="btn-group">
+                <label ng-repeat="(name, v) in colors" class="btn btn-default" ng-model="ecu.color" uib-btn-radio="name">{{name | capitalize}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div id="drawing"></div>
+      </div>
+    </div>
+  </div>
+
   <script src="main.js"></script>
 </body>
 </html>
