@@ -1,4 +1,10 @@
 #ecu {
+    width: 100%;
+    max-width: 28em;
     margin: auto;
     padding: 2em;
+}
+
+#ecu svg {
+    width: 100%;
 }

@@ -1,5 +1,5 @@
 Formes = {
-  EcuFrancais: 'M0,0 L0,5 Q0,8 5,11 Q10,8 10,5 L10,0 z'
+  EcuFrancais: 'M0,0 L0,50 Q0,80 50,110 Q100,80 100,50 L100,0 z'
 }
 
 Couleurs = {
@@ -21,7 +21,7 @@ function Ecu() {
 
 Ecu.prototype.init = function() {
   this.svg = SVG('ecu');
-  $('#ecu').width(100).height(110);
+  this.svg.viewbox(0, 0, 100, 110);
 
   this.svg.bg = this.svg.rect(100, 110).fill(this.couleur);
   this.svg.ecu = this.svg.path(this.forme).size(100);
