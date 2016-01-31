@@ -30,7 +30,7 @@ Ecu.prototype.init = function() {
 
 Ecu.prototype.updateCouleur = function() {
   if (this.svg) {
-    this.svg.bg.fill(Couleurs[this.couleur]);
+    this.svg.bg.fill(this.couleur);
   }
 };
 
