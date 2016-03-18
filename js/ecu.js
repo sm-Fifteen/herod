@@ -23,14 +23,25 @@ Ecu.prototype.init = function() {
   this.svg = SVG('ecu');
   this.svg.viewbox(0, 0, 100, 110);
 
-  this.svg.bg = this.svg.rect(100, 110).fill(this.couleur);
+  this.svg.parts = [];  
   this.svg.ecu = this.svg.path(this.forme).size(100);
-  this.svg.bg.clipWith(this.svg.ecu);
+  
+  var width=this.svg.ecu.width();
+  var height=this.svg.ecu.height();
+  
+  this.svg.parts.push(this.svg.rect(width/2, height).fill(this.couleur));
+  this.svg.parts.push(this.svg.rect(width/2, height).x(width/2).fill(Couleurs.Gueules));
+  
+  var clip = this.svg.clip().add(this.svg.ecu);
+  
+  this.svg.parts.forEach(function(part, idx, array) {
+    array[idx] = part.clipWith(clip);
+  }, this);
 };
 
 Ecu.prototype.updateCouleur = function() {
   if (this.svg) {
-    this.svg.bg.fill(this.couleur);
+    this.svg.parts[0].fill(this.couleur);
   }
 };
 
