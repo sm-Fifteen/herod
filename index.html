@@ -41,6 +41,17 @@
             </div>
           </div>
         </div>
+
+		<div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Partition</h3>
+          </div>
+          <div class="panel-body">
+            <div class="btn-group">
+              <label ng-repeat="(name, func) in Partitions" class="btn btn-default" ng-model="ecu.partition" uib-btn-radio="func">{{name}}</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
