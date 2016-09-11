@@ -1,8 +1,23 @@
 function Ecu() {
   this.forme = Formes.EcuFrancais;
   this.partition = Partitions.Plain;
+  this.parts = [];
   this.couleur = Couleurs.Azur;
   this.couleurAlt = Couleurs.Gueules;
+
+  //this.selectedPart; //A paper shape, added by the directive
+}
+
+function PartitionGroup() {
+    this.style = "Tiercé";
+    this.axis = "Pal"
+    this.partitions = {
+
+    }
+}
+
+function Partition() {
+    this.background;
 }
 
 /*
