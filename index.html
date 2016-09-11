@@ -10,7 +10,9 @@
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="bower_components/svg.js/dist/svg.min.js"></script>
   <script src="bower_components/lodash/dist/lodash.min.js"></script>
+  <script src="bower_components/paper/dist/paper-core.js"></script>
 
+  <script src="js/ressources.js"></script>
   <script src="js/ecu.js"></script>
   <script src="js/app.js"></script>
 </head>
@@ -26,7 +28,9 @@
 
   <div ng-controller="EcuCtrl" class="container-fluid">
     <div class="col-md-6">
-      <div id="ecu"></div>
+      <div id="ecu-container">
+          <canvas id="ecu" ecu-viewport></canvas>
+      </div>
     </div>
 
     <div class="row">
