@@ -4,7 +4,10 @@ function Ecu() {
   this.parts = [{
       couleur: Couleurs.Azur,
       shape: undefined,
-  }];
+  },{
+      couleur: Couleurs.Sable,
+      shape: undefined,
+  },];
 
   this.selectedShape = undefined; // A paper shape, added by the directive
   this.selectedPart = undefined; // The partition represented by that shape, added by the controler

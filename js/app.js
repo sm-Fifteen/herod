@@ -8,8 +8,14 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             function generateEcuLayout(ecu, shape) {
                 var layoutShapes = [];
 
-                ecu.parts.forEach(function(part){
-                    var partShape = new scope.paper.Shape.Rectangle(shape.bounds);
+                ecu.parts.forEach(function(part, idx, list){
+                    var width = shape.bounds.width / list.length;
+                    var posX = shape.bounds.x + width * idx;
+                    var posY = shape.bounds.y;
+                    var height =  shape.bounds.height;
+                    var dims = new scope.paper.Rectangle(posX, posY, width, height);
+
+                    var partShape = new scope.paper.Shape.Rectangle(dims);
                     partShape.fillColor = part.couleur;
                     part.shape = partShape;
                     layoutShapes.push(partShape);
