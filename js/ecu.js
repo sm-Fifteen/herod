@@ -1,38 +1,67 @@
-Formes = {
-  EcuFrancais: 'M0,0 L0,50 Q0,80 50,110 Q100,80 100,50 L100,0 z'
-};
-
-Couleurs = {
-  Gueules: '#e20909',
-  Azur: '#2b5df2',
-  Sable: '#000000',
-  Sinople: '#5ab532',
-  Pourpre: '#d576ad',
-  Or: '#fcef3c',
-  Argent: '#ffffff'
-};
-
 function Ecu() {
   this.forme = Formes.EcuFrancais;
-  this.couleur = Couleurs.Azur;
+  this.partition = Partitions.Plain;
+  this.parts = [{
+      couleur: Couleurs.Azur,
+      shape: undefined,
+  },{
+      couleur: Couleurs.Sable,
+      shape: undefined,
+  },];
 
-  _.bindAll(this, 'init', 'updateCouleur');
+  this.selectedShape = undefined; // A paper shape, added by the directive
+  this.selectedPart = undefined; // The partition represented by that shape, added by the controler
 }
 
+function PartitionGroup() {
+    this.style = "Tiercé";
+    this.axis = "Pal"
+    this.partitions = {
+
+    }
+}
+
+function Partition() {
+    this.background;
+}
+
+/*
 Ecu.prototype.init = function() {
+  // Initiallize surface
   this.svg = SVG('ecu');
   this.svg.viewbox(0, 0, 100, 110);
 
-  this.svg.bg = this.svg.rect(100, 110).fill(this.couleur);
+  this.svg.parts = [];
   this.svg.ecu = this.svg.path(this.forme).size(100);
-  this.svg.bg.clipWith(this.svg.ecu);
+
+  this.svg.clippath = this.svg.clip().add(this.svg.ecu);
+
+  // Define and clip partitions
+  this.updatePartition();
 };
 
 Ecu.prototype.updateCouleur = function() {
   if (this.svg) {
-    this.svg.bg.fill(this.couleur);
+    this.svg.parts[0].fill(this.couleur);
   }
 };
 
-ecu = new Ecu();
-$(document).ready(ecu.init);
+Ecu.prototype.updatePartition = function() {
+  console.log("Updated")
+  if (this.svg) {
+	this.svg.parts.forEach(function(part) {
+		part.remove();
+	})
+	this.svg.parts.length = 0;
+    this.partition.apply(this, [this.svg.ecu.height(), this.svg.ecu.width()]);
+
+	this.reclip();
+  }
+}
+
+Ecu.prototype.reclip = function() {
+  this.svg.parts.forEach(function(part, idx, array) {
+    array[idx] = part.clipWith(this.svg.clippath);
+  }, this);
+}
+*/

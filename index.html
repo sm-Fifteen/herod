@@ -10,7 +10,9 @@
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="bower_components/svg.js/dist/svg.min.js"></script>
   <script src="bower_components/lodash/dist/lodash.min.js"></script>
+  <script src="bower_components/paper/dist/paper-core.js"></script>
 
+  <script src="js/ressources.js"></script>
   <script src="js/ecu.js"></script>
   <script src="js/app.js"></script>
 </head>
@@ -26,7 +28,9 @@
 
   <div ng-controller="EcuCtrl" class="container-fluid">
     <div class="col-md-6">
-      <div id="ecu"></div>
+      <div id="ecu-container">
+          <canvas id="ecu" ecu-viewport></canvas>
+      </div>
     </div>
 
     <div class="row">
@@ -37,7 +41,18 @@
           </div>
           <div class="panel-body">
             <div class="btn-group">
-              <label ng-repeat="(name, hex) in Couleurs" class="btn btn-default" ng-model="ecu.couleur" uib-btn-radio="hex">{{name}}</label>
+              <label ng-repeat="(name, hex) in Couleurs" class="btn btn-default" ng-model="ecu.selectedPart.couleur" ng-disabled="!ecu.selectedPart" uib-btn-radio="hex">{{name}}</label>
+            </div>
+          </div>
+        </div>
+
+		<div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Partition</h3>
+          </div>
+          <div class="panel-body">
+            <div class="btn-group">
+              <label ng-repeat="(name, func) in Partitions" class="btn btn-default" ng-model="ecu.partition" uib-btn-radio="func">{{name}}</label>
             </div>
           </div>
         </div>
