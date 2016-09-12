@@ -6,10 +6,14 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
         scope: true,
         link: function(scope, element) {
             function generateEcuLayout(ecu, shape) {
-                var layoutShapes = [
-                    new scope.paper.Shape.Rectangle(shape.bounds),
-                ];
-                layoutShapes[0].fillColor = ecu.couleur;
+                var layoutShapes = [];
+
+                ecu.parts.forEach(function(part){
+                    var partShape = new scope.paper.Shape.Rectangle(shape.bounds);
+                    partShape.fillColor = part.couleur;
+                    part.shape = partShape;
+                    layoutShapes.push(partShape);
+                });
 
                 return layoutShapes;
             }
@@ -42,22 +46,33 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                 if (paper) {
                     var canvasClick = new paper.Point(event.offsetX, event.offsetY);
                     var hitResult = paper.project.hitTest(canvasClick);
-                    console.log(hitResult);
-                    if (hitResult) scope.ecu.selectedPart = hitResult.item;
-                }
-            });
 
-            scope.$watch("ecu.couleur", function(newVal) {
-                console.log(scope.ecu);
-                if(scope.ecu.selectedPart) scope.ecu.selectedPart.fillColor = newVal;
+                    if (hitResult) scope.$apply(function() {
+                        scope.ecu.selectedShape = hitResult.item;
+                    });
+                }
             });
         }
     }
 }]);
 
 app.controller('EcuCtrl', function($scope) {
-  $scope.Couleurs = Couleurs;
-  $scope.Partitions = Partitions;
+    $scope.Couleurs = Couleurs;
+    $scope.Partitions = Partitions;
 
-  $scope.ecu = new Ecu();
+    $scope.ecu = new Ecu();
+
+    $scope.$watch("ecu.selectedShape", function(newVal){
+        console.log($scope.ecu.parts);
+        $scope.ecu.selectedPart = _.find($scope.ecu.parts, function(elem){
+            return elem.shape === newVal;
+        });
+    });
+
+    $scope.$watch("ecu.selectedPart.couleur", function(newVal) {
+        // If selecedPart is empty, an object is created by angular with no associated shape
+        if (($scope.ecu.selectedPart || {}).shape) {
+            $scope.ecu.selectedPart.shape.fillColor = newVal;
+        }
+    });
 });

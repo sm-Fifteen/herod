@@ -1,11 +1,13 @@
 function Ecu() {
   this.forme = Formes.EcuFrancais;
   this.partition = Partitions.Plain;
-  this.parts = [];
-  this.couleur = Couleurs.Azur;
-  this.couleurAlt = Couleurs.Gueules;
+  this.parts = [{
+      couleur: Couleurs.Azur,
+      shape: undefined,
+  }];
 
-  //this.selectedPart; //A paper shape, added by the directive
+  this.selectedShape = undefined; // A paper shape, added by the directive
+  this.selectedPart = undefined; // The partition represented by that shape, added by the controler
 }
 
 function PartitionGroup() {

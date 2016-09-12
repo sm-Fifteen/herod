@@ -41,7 +41,7 @@
           </div>
           <div class="panel-body">
             <div class="btn-group">
-              <label ng-repeat="(name, hex) in Couleurs" class="btn btn-default" ng-model="ecu.couleur" uib-btn-radio="hex">{{name}}</label>
+              <label ng-repeat="(name, hex) in Couleurs" class="btn btn-default" ng-model="ecu.selectedPart.couleur" ng-disabled="!ecu.selectedPart" uib-btn-radio="hex">{{name}}</label>
             </div>
           </div>
         </div>
