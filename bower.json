@@ -18,7 +18,6 @@
     "tests"
   ],
   "dependencies": {
-    "svg.js": "~2.2.5",
     "paper": "~0.10.2",
     "jquery": "^2.2.0",
     "angular-bootstrap": "^1.1.1",
