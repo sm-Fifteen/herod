@@ -48,16 +48,13 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             // Timeout with 0 delay, to wait for the DOM to render.
             $timeout(drawEcuOn(element[0]), 0);
 
-            element.on("click", function(event){
-                if (paper) {
-                    var canvasClick = new paper.Point(event.offsetX, event.offsetY);
-                    var hitResult = paper.project.hitTest(canvasClick);
+            paper.view.onMouseDown = function(event){
+                var hitResult = paper.project.hitTest(event.point);
 
-                    if (hitResult) scope.$apply(function() {
-                        scope.ecu.selectedShape = hitResult.item;
-                    });
-                }
-            });
+                if (hitResult) scope.$apply(function() {
+                    scope.ecu.selectedShape = hitResult.item;
+                });
+            }
         }
     }
 }]);
