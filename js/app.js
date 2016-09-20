@@ -8,7 +8,7 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             function generateEcuLayout(ecu, shape) {
                 var layoutShapes = [];
 
-                ecu.parts.forEach(function(part, idx, list){
+                ecu.champ.children.forEach(function(part, idx, list){
                     var width = shape.bounds.width / list.length;
                     var posX = shape.bounds.x + width * idx;
                     var posY = shape.bounds.y;
@@ -65,16 +65,18 @@ app.controller('EcuCtrl', function($scope) {
 
     $scope.ecu = new Ecu();
 
-    $scope.$watch("ecu.selectedShape", function(newVal){
-        console.log($scope.ecu.parts);
-        $scope.ecu.selectedPart = _.find($scope.ecu.parts, function(elem){
+    $scope.$watch("ecu.selectedShape", function(newVal, oldVal){
+        if (oldVal) oldVal.selected = false;
+        if (newVal) newVal.selected = true; // Might be undefined when starting up
+
+        $scope.ecu.selectedPart = _.find($scope.ecu.champ.children, function(elem){
             return elem.shape === newVal;
         });
     });
 
     $scope.$watch("ecu.selectedPart.couleur", function(newVal) {
         // If selecedPart is empty, an object is created by angular with no associated shape
-        if (($scope.ecu.selectedPart || {}).shape) {
+        if (_.get($scope.ecu.selectedPart, "shape")) {
             $scope.ecu.selectedPart.shape.fillColor = newVal;
         }
     });
