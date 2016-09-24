@@ -10,8 +10,8 @@ function Ecu() {
 // AKA Logical partition
 var testPartitionGroup = {
     layout: {
-        "model" : DivisionModel.AxisAligned,
-        "count" : 4,
+        "model" : DivisionModel.AroundCenter,
+        "count" : 3,
         "rotation" : 0,
     },
     children: [{

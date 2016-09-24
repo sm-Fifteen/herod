@@ -5,21 +5,52 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
         restrict: 'A',
         scope: true,
         link: function(scope, element) {
-            function generateEcuLayout(ecu, shape) {
+            function generatePartitionLayout(champ, shape) {
                 var layoutShapes = [];
 
-                ecu.champ.children.forEach(function(part, idx, list){
-                    var width = shape.bounds.width / list.length;
-                    var posX = shape.bounds.x + width * idx;
-                    var posY = shape.bounds.y;
+                if(champ.layout.model === DivisionModel.AxisAligned) {
                     var height =  shape.bounds.height;
-                    var dims = new scope.paper.Rectangle(posX, posY, width, height);
+                    var width = shape.bounds.width / champ.layout.count;
 
-                    var partShape = new scope.paper.Shape.Rectangle(dims);
-                    partShape.fillColor = part.couleur;
-                    part.shape = partShape;
-                    layoutShapes.push(partShape);
-                });
+                    for(var idx=0; idx<champ.layout.count; idx++) {
+                        var part = champ.children[idx];
+                        var posX = shape.bounds.x + width * idx;
+                        var posY = shape.bounds.y;
+
+                        var dims = new scope.paper.Rectangle(posX, posY, width, height);
+
+                        var partShape = new scope.paper.Shape.Rectangle(dims);
+                        partShape.fillColor = part.couleur;
+                        part.shape = partShape;
+                        layoutShapes.push(partShape);
+                    }
+                } else if (champ.layout.model === DivisionModel.AroundCenter) {
+                    var angle = 360/champ.layout.count;
+                    var pivot = shape.bounds.getCenter();
+                    var edgeRadius = 100; // TODO
+                    var edgeVector = new scope.paper.Point({
+                        length: edgeRadius,
+                        angle: -90, // Aligned with Y+ instead of X+
+                    });
+
+                    for(var idx=0; idx<champ.layout.count; idx++) {
+                        var part = champ.children[idx];
+
+                        var origin = pivot.add(edgeVector);
+                        console.log(origin);
+                        edgeVector.angle += angle/2;
+                        var midpoint = pivot.add(edgeVector);
+                        edgeVector.angle += angle/2;
+                        var endpoint = pivot.add(edgeVector);
+
+                        var partShape = new scope.paper.Path.Arc(origin, midpoint, endpoint);
+                        partShape.add(pivot);
+                        partShape.closePath();
+                        partShape.fillColor = part.couleur;
+                        part.shape = partShape;
+                        layoutShapes.push(partShape);
+                    }
+                }
 
                 return layoutShapes;
             }
@@ -33,7 +64,9 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                 if(scope.ecu) {
                     var shape = scope.paper.PathItem.create(scope.ecu.forme);
                     shape.fitBounds(scope.paper.view.bounds);
-                    ecu.layoutShapes = generateEcuLayout(scope.ecu, shape);
+                    ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape);
+
+                    console.log(ecu.layoutShapes);
 
                     // The first shape in the group acts as the mask.
                     ecu.layoutShapes.unshift(shape);

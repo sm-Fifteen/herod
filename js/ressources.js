@@ -13,8 +13,8 @@ Couleurs = {
 };
 
 DivisionModel = {
-    AxisAligned : "axis",
-    AroundCenter : "center",
+    AxisAligned : "stripes",
+    AroundCenter : "slices",
 }
 
 //divisionModel + nbDivisions + rotation
