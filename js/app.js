@@ -27,7 +27,14 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                 } else if (champ.layout.model === DivisionModel.AroundCenter) {
                     var angle = 360/champ.layout.count;
                     var pivot = shape.bounds.getCenter();
-                    var edgeRadius = 100; // TODO
+
+                    var edgeRadius = Math.max(
+                        pivot.getDistance(shape.bounds.topLeft),
+                        pivot.getDistance(shape.bounds.topRight),
+                        pivot.getDistance(shape.bounds.bottomLeft),
+                        pivot.getDistance(shape.bounds.bottomRight)
+                    )
+
                     var edgeVector = new scope.paper.Point({
                         length: edgeRadius,
                         angle: -90, // Aligned with Y+ instead of X+
