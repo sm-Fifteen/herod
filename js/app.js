@@ -7,6 +7,7 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
         link: function(scope, element) {
             function generatePartitionLayout(champ, shape) {
                 var layoutShapes = [];
+                shape.rotate(-champ.layout.rotation, champ.layout.pivot);
 
                 if(champ.layout.model === DivisionModel.AxisAligned) {
                     var height =  shape.bounds.height;
@@ -26,13 +27,12 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                     }
                 } else if (champ.layout.model === DivisionModel.AroundCenter) {
                     var angle = 360/champ.layout.count;
-                    var pivot = shape.bounds.getCenter();
 
                     var edgeRadius = Math.max(
-                        pivot.getDistance(shape.bounds.topLeft),
-                        pivot.getDistance(shape.bounds.topRight),
-                        pivot.getDistance(shape.bounds.bottomLeft),
-                        pivot.getDistance(shape.bounds.bottomRight)
+                        champ.layout.pivot.getDistance(shape.bounds.topLeft),
+                        champ.layout.pivot.getDistance(shape.bounds.topRight),
+                        champ.layout.pivot.getDistance(shape.bounds.bottomLeft),
+                        champ.layout.pivot.getDistance(shape.bounds.bottomRight)
                     )
 
                     var edgeVector = new scope.paper.Point({
@@ -43,15 +43,15 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                     for(var idx=0; idx<champ.layout.count; idx++) {
                         var part = champ.children[idx];
 
-                        var origin = pivot.add(edgeVector);
+                        var origin = champ.layout.pivot.add(edgeVector);
                         console.log(origin);
                         edgeVector.angle += angle/2;
-                        var midpoint = pivot.add(edgeVector);
+                        var midpoint = champ.layout.pivot.add(edgeVector);
                         edgeVector.angle += angle/2;
-                        var endpoint = pivot.add(edgeVector);
+                        var endpoint = champ.layout.pivot.add(edgeVector);
 
                         var partShape = new scope.paper.Path.Arc(origin, midpoint, endpoint);
-                        partShape.add(pivot);
+                        partShape.add(champ.layout.pivot);
                         partShape.closePath();
                         partShape.fillColor = part.couleur;
                         part.shape = partShape;
@@ -71,6 +71,7 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                 if(scope.ecu) {
                     var shape = scope.paper.PathItem.create(scope.ecu.forme);
                     shape.fitBounds(scope.paper.view.bounds);
+                    scope.ecu.champ.layout.pivot = shape.bounds.getCenter();
                     ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape);
 
                     console.log(ecu.layoutShapes);
@@ -78,6 +79,7 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                     // The first shape in the group acts as the mask.
                     ecu.layoutShapes.unshift(shape);
                     var group = new scope.paper.Group(ecu.layoutShapes);
+                    group.rotate(scope.ecu.champ.layout.rotation, scope.ecu.champ.layout.pivot);
                     if (ecu.layoutShapes[0] === shape) group.clipped = true;
                 }
 

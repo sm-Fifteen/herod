@@ -12,7 +12,7 @@ var testPartitionGroup = {
     layout: {
         "model" : DivisionModel.AroundCenter,
         "count" : 3,
-        "rotation" : 0,
+        "rotation" : 60,
     },
     children: [{
         couleur: Couleurs.Azur,
