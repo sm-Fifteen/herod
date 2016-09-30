@@ -12,12 +12,14 @@ Couleurs = {
   Argent: '#ffffff'
 };
 
+DivisionModel = {
+    AxisAligned : "stripes",
+    AroundCenter : "slices",
+}
+
+//divisionModel + nbDivisions + rotation
+//partGroup = new Partition.Tierce.Pal()
+
 Partitions = {
-	Plain: function(height, width) {
-		this.svg.parts.push(this.svg.rect(width, height).fill(this.couleur));
-	},
-	Parti: function(height, width) {
-		this.svg.parts.push(this.svg.rect(width/2, height).fill(this.couleur));
-		this.svg.parts.push(this.svg.rect(width/2, height).x(width/2).fill(this.couleurAlt));
-	},
+
 }

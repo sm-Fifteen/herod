@@ -1,29 +1,31 @@
 function Ecu() {
   this.forme = Formes.EcuFrancais;
-  this.partition = Partitions.Plain;
-  this.parts = [{
-      couleur: Couleurs.Azur,
-      shape: undefined,
-  },{
-      couleur: Couleurs.Sable,
-      shape: undefined,
-  },];
+  this.champ = testPartitionGroup;
 
   this.selectedShape = undefined; // A paper shape, added by the directive
   this.selectedPart = undefined; // The partition represented by that shape, added by the controler
 }
 
-function PartitionGroup() {
-    this.style = "Tiercé";
-    this.axis = "Pal"
-    this.partitions = {
 
-    }
+// AKA Logical partition
+var testPartitionGroup = {
+    layout: {
+        "model" : DivisionModel.AroundCenter,
+        "count" : 3,
+        "rotation" : 60,
+    },
+    children: [{
+        couleur: Couleurs.Azur,
+        },{
+        couleur: Couleurs.Sable,
+        },{
+        couleur: Couleurs.Azur,
+        },{
+        couleur: Couleurs.Sable,
+    },]
 }
 
-function Partition() {
-    this.background;
-}
+
 
 /*
 Ecu.prototype.init = function() {
