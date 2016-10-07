@@ -62,6 +62,21 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                 return layoutShapes;
             }
 
+            function debugTableAttente(paperShape) {
+                var stops = (TableAttente.generateTable(scope.paper, paperShape));
+                console.info(stops);
+                paperShape.fillColor = "blue";
+                stops.x.forEach(function(stopX){
+                    stops.y.forEach(function(stopY){
+                        new scope.paper.Shape.Circle({
+                            center: new scope.paper.Point(stopX, stopY),
+                            radius: 4,
+                            fillColor: 'red',
+                        });
+                    });
+                });
+            }
+
             function drawEcuOn(passedElement){
                 if(!scope.paper) {
                     scope.paper = new paper.PaperScope();
@@ -71,6 +86,7 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                 if(scope.ecu) {
                     var shape = scope.paper.PathItem.create(scope.ecu.forme);
                     shape.fitBounds(scope.paper.view.bounds);
+
                     scope.ecu.champ.layout.pivot = shape.bounds.getCenter();
                     ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape);
 
@@ -81,6 +97,8 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                     var group = new scope.paper.Group(ecu.layoutShapes);
                     group.rotate(scope.ecu.champ.layout.rotation, scope.ecu.champ.layout.pivot);
                     if (ecu.layoutShapes[0] === shape) group.clipped = true;
+
+                    //debugTableAttente(shape);
                 }
 
                 paper = scope.paper;
