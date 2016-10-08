@@ -25,8 +25,8 @@ var testPartitionGroup = {
     },]
 }
 
-function TableAttente(paper, paperShape) {
-    this.sommets = {
+function TableAttente() {
+    this.points = {
 
     }
     this.directions = {
@@ -38,19 +38,27 @@ function TableAttente(paper, paperShape) {
 }
 
 TableAttente.generateTable = function(paper, paperShape){
-    var stopsX = TableAttente.stopFinder(paper, paperShape);
+
+}
+
+TableAttente.stopFinder2D = function(paper, paperShape, divisionsPerAxis){
+    // TODO: StopFinder is wrong, and doesn't actually create 9 equal shapes like we need.
+
+    var stopsX = TableAttente.stopFinder(paper, paperShape, 3);
     // Flip the shape to get the Y axis
     var viewOrigin = paper.view.bounds.topLeft;
-    var stopsY = TableAttente.stopFinder(paper, paperShape.scale(1, -1, viewOrigin).rotate(90, viewOrigin));
     paperShape.scale(1, -1, viewOrigin).rotate(90, viewOrigin);
+
+    var stopsY = TableAttente.stopFinder(paper, paperShape, 3);
+    paperShape.scale(1, -1, viewOrigin).rotate(90, viewOrigin);
+
     return {
-        x:stopsX,
-        y:stopsY,
+        stopsX: stopsX,
+        stopsY: stopsY,
     }
 }
 
-TableAttente.stopFinder = function(paper, paperShape) {
-    var divisionsNeeded = 3;
+TableAttente.stopFinder = function(paper, paperShape, divisionsNeeded) {
     var stopsNeeded = divisionsNeeded-1;
     var targetArea = Math.abs(paperShape.area/divisionsNeeded); // Area may be negative (??)
     var tolerence = targetArea/200;

@@ -63,17 +63,26 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             }
 
             function debugTableAttente(paperShape) {
-                var stops = (TableAttente.generateTable(scope.paper, paperShape));
-                console.info(stops);
-                paperShape.fillColor = "blue";
-                stops.x.forEach(function(stopX){
-                    stops.y.forEach(function(stopY){
-                        new scope.paper.Shape.Circle({
-                            center: new scope.paper.Point(stopX, stopY),
-                            radius: 4,
-                            fillColor: 'red',
-                        });
-                    });
+                var divisionsPerAxis = 3;
+                var stops = TableAttente.stopFinder2D(scope.paper, paperShape, divisionsPerAxis);
+                var stopsX = stops.stopsX, stopsY = stops.stopsY;
+
+                var regionMasks = [];
+                for(var i = 0; i<divisionsPerAxis; i++) {
+                    var y1 = stopsY[i], y2 = stopsY[i+1];
+
+                    for(var j = 0; j<divisionsPerAxis; j++) {
+                        var x1 = stopsX[j], x2 = stopsX[j+1];
+
+                        regionMasks.push(new paper.Path.Rectangle({
+                            from: [x1, y1],
+                            to: [x2, y2],
+                        }));
+                    }
+                }
+
+                regionMasks.forEach(function(mask, idx){
+                    mask.intersect(paperShape).fillColor = '#'+idx*11+''+idx*11+''+idx*11;
                 });
             }
 
