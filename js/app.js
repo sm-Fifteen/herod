@@ -63,26 +63,10 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             }
 
             function debugTableAttente(paperShape) {
-                var divisionsPerAxis = 3;
-                var stops = TableAttente.stopFinder2D(scope.paper, paperShape, divisionsPerAxis);
-                var stopsX = stops.stopsX, stopsY = stops.stopsY;
+                var regions = TableAttente.generateRegions(scope.paper, paperShape);
 
-                var regionMasks = [];
-                for(var i = 0; i<divisionsPerAxis; i++) {
-                    var y1 = stopsY[i], y2 = stopsY[i+1];
-
-                    for(var j = 0; j<divisionsPerAxis; j++) {
-                        var x1 = stopsX[j], x2 = stopsX[j+1];
-
-                        regionMasks.push(new paper.Path.Rectangle({
-                            from: [x1, y1],
-                            to: [x2, y2],
-                        }));
-                    }
-                }
-
-                regionMasks.forEach(function(mask, idx){
-                    mask.intersect(paperShape).fillColor = '#'+idx*11+''+idx*11+''+idx*11;
+                regions.forEach(function(region, idx){
+                    region.intersect(paperShape).fillColor = '#'+idx*11+''+idx*11+''+idx*11;
                 });
             }
 
@@ -107,7 +91,7 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                     group.rotate(scope.ecu.champ.layout.rotation, scope.ecu.champ.layout.pivot);
                     if (ecu.layoutShapes[0] === shape) group.clipped = true;
 
-                    //debugTableAttente(shape);
+                    debugTableAttente(shape);
                 }
 
                 paper = scope.paper;
