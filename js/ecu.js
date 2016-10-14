@@ -41,6 +41,35 @@ TableAttente.generateTable = function(paper, paperShape){
 
 }
 
+TableAttente.generatePoints = function(paper, paperShape) {
+    var stops = TableAttente.stopFinder2D(paper, paperShape, 2);
+
+    var center = new paper.Point(stops.x[1], stops.y[1]);
+
+    var parti = edgeScan(paper, paperShape,
+        center, new paper.Point(stops.x[1], stops.y[2]));
+    var coupe = edgeScan(paper, paperShape,
+        center, new paper.Point(stops.x[2], stops.y[1]));
+    var tranche = edgeScan(paper, paperShape,
+        new paper.Point(stops.x[0], stops.y[0]), center);
+    var taille = edgeScan(paper, paperShape,
+        new paper.Point(stops.x[2], stops.y[0]), center);
+
+    return {
+        pointChef: parti[0],
+        pointPointe: parti.reverse()[0],
+
+        // Dexter and Sinister are the left and right of the bearer
+        // They are reversd here.
+        flancDextre: coupe[0],
+        flancSenestre: coupe.reverse()[0],
+        chefDextre: tranche[0],
+        pointeSenestre: tranche.reverse()[0],
+        chefSenestre: taille[0],
+        pointeDextre: taille.reverse()[0],
+    }
+}
+
 TableAttente.generateRegions = function(paper, paperShape) {
     var divisionsPerAxis = 3;
     var stops = TableAttente.stopFinder2D(paper, paperShape, divisionsPerAxis);
@@ -65,12 +94,12 @@ TableAttente.generateRegions = function(paper, paperShape) {
 TableAttente.stopFinder2D = function(paper, paperShape, divisionsPerAxis){
     // TODO: StopFinder is wrong, and doesn't actually create 9 equal shapes like we need.
 
-    var stopsX = TableAttente.stopFinder(paper, paperShape, 3);
+    var stopsX = TableAttente.stopFinder(paper, paperShape, divisionsPerAxis);
     // Flip the shape to get the Y axis
     var viewOrigin = paper.view.bounds.topLeft;
     paperShape.scale(1, -1, viewOrigin).rotate(90, viewOrigin);
 
-    var stopsY = TableAttente.stopFinder(paper, paperShape, 3);
+    var stopsY = TableAttente.stopFinder(paper, paperShape, divisionsPerAxis);
     paperShape.scale(1, -1, viewOrigin).rotate(90, viewOrigin);
 
     return {
