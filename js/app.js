@@ -63,8 +63,9 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             }
 
             function debugTableAttente(paperShape) {
-                var regions = TableAttente.generateRegions(scope.paper, paperShape);
-                var points = TableAttente.generatePoints(scope.paper, paperShape);
+                var table = TableAttente.generateTable(scope.paper, paperShape);
+                var regions = table.regions;
+                var points = table.points;
 
                 regions.forEach(function(region, idx){
                     region.intersect(paperShape).fillColor = '#'+idx*11+''+idx*11+''+idx*11;

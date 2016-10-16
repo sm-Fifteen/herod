@@ -25,20 +25,17 @@ var testPartitionGroup = {
     },]
 }
 
-function TableAttente() {
-    this.points = {
-
-    }
-    this.directions = {
-
-    }
-    this.regions = {
-
-    }
+function TableAttente(points, regions) {
+    this.points = points;
+    this.regions = regions;
+    //this.directions = { }
 }
 
 TableAttente.generateTable = function(paper, paperShape){
-
+    return new TableAttente(
+        TableAttente.generatePoints(paper, paperShape),
+        TableAttente.generateRegions(paper, paperShape)
+    );
 }
 
 TableAttente.generatePoints = function(paper, paperShape) {
