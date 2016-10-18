@@ -7,57 +7,17 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
         link: function(scope, element) {
             function generatePartitionLayout(champ, shape) {
                 var layoutShapes = [];
-                shape.rotate(-champ.layout.rotation, champ.layout.pivot);
 
-                if(champ.layout.model === DivisionModel.AxisAligned) {
-                    var height =  shape.bounds.height;
-                    var width = shape.bounds.width / champ.layout.count;
+                var table = TableAttente.generateTable(scope.paper, shape);
 
-                    for(var idx=0; idx<champ.layout.count; idx++) {
-                        var part = champ.children[idx];
-                        var posX = shape.bounds.x + width * idx;
-                        var posY = shape.bounds.y;
+                var line = new scope.paper.Path.Line(table.points.flancDextre, table.points.flancSenestre);
+                layoutShapes = slice(scope.paper, shape, line);
 
-                        var dims = new scope.paper.Rectangle(posX, posY, width, height);
-
-                        var partShape = new scope.paper.Shape.Rectangle(dims);
-                        partShape.fillColor = part.couleur;
-                        part.shape = partShape;
-                        layoutShapes.push(partShape);
-                    }
-                } else if (champ.layout.model === DivisionModel.AroundCenter) {
-                    var angle = 360/champ.layout.count;
-
-                    var edgeRadius = Math.max(
-                        champ.layout.pivot.getDistance(shape.bounds.topLeft),
-                        champ.layout.pivot.getDistance(shape.bounds.topRight),
-                        champ.layout.pivot.getDistance(shape.bounds.bottomLeft),
-                        champ.layout.pivot.getDistance(shape.bounds.bottomRight)
-                    )
-
-                    var edgeVector = new scope.paper.Point({
-                        length: edgeRadius,
-                        angle: -90, // Aligned with Y+ instead of X+
-                    });
-
-                    for(var idx=0; idx<champ.layout.count; idx++) {
-                        var part = champ.children[idx];
-
-                        var origin = champ.layout.pivot.add(edgeVector);
-                        console.log(origin);
-                        edgeVector.angle += angle/2;
-                        var midpoint = champ.layout.pivot.add(edgeVector);
-                        edgeVector.angle += angle/2;
-                        var endpoint = champ.layout.pivot.add(edgeVector);
-
-                        var partShape = new scope.paper.Path.Arc(origin, midpoint, endpoint);
-                        partShape.add(champ.layout.pivot);
-                        partShape.closePath();
-                        partShape.fillColor = part.couleur;
-                        part.shape = partShape;
-                        layoutShapes.push(partShape);
-                    }
-                }
+                layoutShapes.forEach(function(partShape, idx){
+                    var partObj = champ.children[idx];
+                    partObj.shape = partShape;
+                    partShape.fillColor = partObj.couleur;
+                });
 
                 return layoutShapes;
             }
@@ -99,16 +59,11 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                     var shape = scope.paper.PathItem.create(scope.ecu.forme);
                     shape.fitBounds(scope.paper.view.bounds);
 
-                    scope.ecu.champ.layout.pivot = shape.bounds.getCenter();
-                    ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape);
+                    var table = TableAttente.generateTable(scope.paper, shape);
+
+                    ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape, table);
 
                     console.log(ecu.layoutShapes);
-
-                    // The first shape in the group acts as the mask.
-                    ecu.layoutShapes.unshift(shape);
-                    var group = new scope.paper.Group(ecu.layoutShapes);
-                    group.rotate(scope.ecu.champ.layout.rotation, scope.ecu.champ.layout.pivot);
-                    if (ecu.layoutShapes[0] === shape) group.clipped = true;
 
                     //debugTableAttente(shape);
                 }

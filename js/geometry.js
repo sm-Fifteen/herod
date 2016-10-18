@@ -84,3 +84,17 @@ var divideSurface = function(paper, paperShape, divisionsNeeded) {
 
     return stops;
 }
+
+var slice = function(paper, paperShape, line) {
+    var intersections = paperShape.getIntersections(line);
+    var newPath;
+
+    intersections.forEach(function(intersection){
+        var curve = intersection.curve;
+        newPath = curve.splitAt(intersection);
+    });
+
+    paperShape.closePath();
+    newPath.closePath();
+    return [paperShape, newPath];
+}
