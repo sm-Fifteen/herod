@@ -94,7 +94,7 @@ var slice = function(paper, paperShape, line) {
         newPath = curve.splitAt(intersection);
     });
 
-    paperShape.closePath();
-    newPath.closePath();
+    paperShape.join(line.clone());
+    newPath.join(line.clone());
     return [paperShape, newPath];
 }

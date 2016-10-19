@@ -10,7 +10,7 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
 
                 var table = TableAttente.generateTable(scope.paper, shape);
 
-                var line = new scope.paper.Path.Line(table.points.flancDextre, table.points.flancSenestre);
+                var line = new scope.paper.Path.Line(table.points.chefDextre, table.points.pointeSenestre);
                 layoutShapes = slice(scope.paper, shape, line);
 
                 layoutShapes.forEach(function(partShape, idx){
