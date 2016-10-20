@@ -10,8 +10,12 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
 
                 var table = TableAttente.generateTable(scope.paper, shape);
 
-                var line = new scope.paper.Path.Line(table.points.chefDextre, table.points.pointeSenestre);
-                layoutShapes = slice(scope.paper, shape, line);
+                champ.partition.cuts.forEach(function(cut){
+                    var point1 = table.points[cut[0]];
+                    var point2 = table.points[cut[1]];
+                    var line = new scope.paper.Path.Line(point1, point2);
+                    layoutShapes = slice(scope.paper, shape, line);
+                });
 
                 layoutShapes.forEach(function(partShape, idx){
                     var partObj = champ.children[idx];
@@ -82,6 +86,17 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                     scope.ecu.selectedShape = hitResult.item;
                 });
             }
+
+            scope.$watch("ecu.champ.partition", function(newVal) {
+                //Redraw the whole thing on partition change
+                scope.paper.project.clear();
+                drawEcuOn(element[0]);
+
+                if(scope.ecu.selectedPart){
+                    scope.ecu.selectedShape = scope.ecu.selectedPart.shape;
+                    scope.ecu.selectedShape.selected = true;
+                }
+            });
         }
     }
 }]);

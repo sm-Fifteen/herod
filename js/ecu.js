@@ -6,14 +6,9 @@ function Ecu() {
   this.selectedPart = undefined; // The partition represented by that shape, added by the controler
 }
 
-
 // AKA Logical partition
 var testPartitionGroup = {
-    layout: {
-        "model" : DivisionModel.AroundCenter,
-        "count" : 3,
-        "rotation" : 60,
-    },
+    partition: Partitions.parti,
     children: [{
         couleur: Couleurs.Azur,
         },{
