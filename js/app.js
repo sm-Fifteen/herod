@@ -5,10 +5,8 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
         restrict: 'A',
         scope: true,
         link: function(scope, element) {
-            function generatePartitionLayout(champ, shape) {
+            function generatePartitionLayout(champ, shape, table) {
                 var layoutShapes = [];
-
-                var table = TableAttente.generateTable(scope.paper, shape);
 
                 champ.partition.cuts.forEach(function(cut){
                     var point1 = table.points[cut[0]];
@@ -87,7 +85,7 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                 });
             }
 
-            scope.$watch("ecu.champ.partition", function(newVal) {
+            scope.$watch("ecu.champ.partition", function(newVal, oldVal) {
                 //Redraw the whole thing on partition change
                 scope.paper.project.clear();
                 drawEcuOn(element[0]);
@@ -108,8 +106,9 @@ app.controller('EcuCtrl', function($scope) {
     $scope.ecu = new Ecu();
 
     $scope.$watch("ecu.selectedShape", function(newVal, oldVal){
+        if (!newVal) return; // Might be undefined when starting up
         if (oldVal) oldVal.selected = false;
-        if (newVal) newVal.selected = true; // Might be undefined when starting up
+        newVal.selected = true;
 
         $scope.ecu.selectedPart = _.find($scope.ecu.champ.children, function(elem){
             return elem.shape === newVal;
