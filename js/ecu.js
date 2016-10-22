@@ -9,6 +9,7 @@ function Ecu() {
 // AKA Logical partition
 var testPartitionGroup = {
     partition: Partitions.parti,
+    // table: new TableAttente(),
     children: [{
         couleur: Couleurs.Azur,
         },{

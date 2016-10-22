@@ -5,12 +5,12 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
         restrict: 'A',
         scope: true,
         link: function(scope, element) {
-            function generatePartitionLayout(champ, shape, table) {
+            function generatePartitionLayout(champ, shape) {
                 var layoutShapes = [];
 
                 champ.partition.cuts.forEach(function(cut){
-                    var point1 = table.points[cut[0]];
-                    var point2 = table.points[cut[1]];
+                    var point1 = champ.table.points[cut[0]];
+                    var point2 = champ.table.points[cut[1]];
                     var line = new scope.paper.Path.Line(point1, point2);
                     layoutShapes = slice(scope.paper, shape, line);
                 });
@@ -61,11 +61,13 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                     var shape = scope.paper.PathItem.create(scope.ecu.forme);
                     shape.fitBounds(scope.paper.view.bounds);
 
-                    var table = TableAttente.generateTable(scope.paper, shape);
+                    if(!scope.ecu.champ.table) {
+                        // TODO : Use a watch on ecu.forme instead
+                        scope.ecu.champ.table = TableAttente.generateTable(scope.paper, shape);
+                    }
 
-                    ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape, table);
-
-                    console.log(ecu.layoutShapes);
+                    scope.ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape);
+                    console.log(scope.ecu.layoutShapes);
 
                     //debugTableAttente(shape);
                 }
@@ -86,6 +88,8 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             }
 
             scope.$watch("ecu.champ.partition", function(newVal, oldVal) {
+                if(newVal === oldVal) return;
+
                 //Redraw the whole thing on partition change
                 scope.paper.project.clear();
                 drawEcuOn(element[0]);
