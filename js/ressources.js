@@ -21,5 +21,28 @@ DivisionModel = {
 //partGroup = new Partition.Tierce.Pal()
 
 Partitions = {
-
+    parti: {
+        cuts: [
+            ["pointChef", "pointPointe"]
+        ],
+        nameFr: ["Parti"],
+    },
+    coupe: {
+        cuts: [
+            ["flancDextre", "flancSenestre"]
+        ],
+        nameFr: ["Coupé"],
+    },
+    tranche: {
+        cuts: [
+            ["chefDextre", "pointeSenestre"]
+        ],
+        nameFr: ["Tranché"],
+    },
+    taille: {
+        cuts: [
+            ["chefSenestre", "pointeDextre"]
+        ],
+        nameFr: ["Taillé"],
+    },
 }

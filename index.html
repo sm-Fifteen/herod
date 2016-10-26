@@ -12,6 +12,8 @@
   <script src="bower_components/paper/dist/paper-core.js"></script>
 
   <script src="js/ressources.js"></script>
+  <script src="js/geometry.js"></script>
+  <script src="js/table.js"></script>
   <script src="js/ecu.js"></script>
   <script src="js/app.js"></script>
 </head>
@@ -51,7 +53,7 @@
           </div>
           <div class="panel-body">
             <div class="btn-group">
-              <label ng-repeat="(name, func) in Partitions" class="btn btn-default" ng-model="ecu.partition" uib-btn-radio="func">{{name}}</label>
+              <label ng-repeat="(name, part) in Partitions" class="btn btn-default" ng-model="ecu.champ.partition" uib-btn-radio="part">{{name}}</label>
             </div>
           </div>
         </div>
