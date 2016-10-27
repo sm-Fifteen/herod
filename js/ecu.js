@@ -8,15 +8,15 @@ function Ecu() {
 
 // AKA Logical partition
 var testPartitionGroup = {
-    partition: Partitions.parti,
+    partition: Partitions.ecartele,
     // table: new TableAttente(),
     children: [{
         couleur: Couleurs.Azur,
         },{
         couleur: Couleurs.Sable,
         },{
-        couleur: Couleurs.Azur,
-        },{
         couleur: Couleurs.Sable,
+        },{
+        couleur: Couleurs.Azur,
     },]
 }

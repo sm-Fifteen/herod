@@ -45,4 +45,11 @@ Partitions = {
         ],
         nameFr: ["Taillé"],
     },
+    ecartele: {
+        cuts: [
+            ["flancDextre", "abyme", "pointChef"],
+            ["pointChef", "abyme", "flancSenestre"],
+            ["flancDextre", "abyme", "pointPointe"],
+        ]
+    }
 }

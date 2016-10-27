@@ -1,5 +1,7 @@
 var app = angular.module('herod', ['ui.bootstrap']);
 
+window.DEBUG = 0;
+
 app.directive("ecuViewport", ["$timeout", function($timeout) {
     return {
         restrict: 'A',
@@ -9,11 +11,12 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                 var layoutShapes = [];
 
                 champ.partition.cuts.forEach(function(cut){
-                    var point1 = champ.table.points[cut[0]];
-                    var point2 = champ.table.points[cut[1]];
-                    var line = new scope.paper.Path.Line(point1, point2);
-                    layoutShapes = slice(scope.paper, shape, line);
+                    var returnList = slice(scope.paper, shape, cut, champ.table.points);
+                    layoutShapes.push(returnList[1]);
+                    shape = returnList[0];
                 });
+
+                layoutShapes.push(shape);
 
                 layoutShapes.forEach(function(partShape, idx){
                     var partObj = champ.children[idx];

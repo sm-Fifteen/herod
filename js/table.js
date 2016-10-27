@@ -37,6 +37,8 @@ TableAttente.generatePoints = function(paper, paperShape) {
         pointeSenestre: tranche.reverse()[0],
         chefSenestre: taille[0],
         pointeDextre: taille.reverse()[0],
+
+        abyme: center,
     }
 }
 
