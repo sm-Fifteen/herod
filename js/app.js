@@ -69,7 +69,7 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                         scope.ecu.champ.table = TableAttente.generateTable(scope.paper, shape);
                     }
 
-                    scope.ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape);
+                    scope.ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape.clone());
                     console.log(scope.ecu.layoutShapes);
 
                     //debugTableAttente(shape);
@@ -85,9 +85,11 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             paper.view.onMouseDown = function(event){
                 var hitResult = paper.project.hitTest(event.point);
 
-                if (hitResult) scope.$apply(function() {
-                    scope.ecu.selectedShape = hitResult.item;
-                });
+                if (hitResult && _.includes(scope.ecu.layoutShapes, hitResult.item)){
+                    scope.$apply(function() {
+                        scope.ecu.selectedShape = hitResult.item;
+                    });
+                }
             }
 
             scope.$watch("ecu.champ.partition", function(newVal, oldVal) {
