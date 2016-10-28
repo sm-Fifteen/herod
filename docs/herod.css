@@ -1,14 +1,1 @@
-#ecu-container {
-	width: 100%;
-	max-width: 28em;
-	margin: auto;
-	padding: 2em;
-}
-
-canvas#ecu {
-	width: 100%;
-	margin: auto;
-}
-
-
-/*# sourceMappingURL=herod.css.map*/
+#ecu-container,canvas#ecu{width:100%;margin:auto}#ecu-container{max-width:28em;padding:2em}
