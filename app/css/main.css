@@ -9,3 +9,10 @@ canvas#ecu {
 	width: 100%;
 	margin: auto;
 }
+
+.azur { color: #2b5df2 }
+.sable { color: #000000 }
+.sinople { color: #5ab532 }
+.pourpre { color: #d576ad }
+.or { color: #fcef3c }
+.argent { color: #ffffff }
