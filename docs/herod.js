@@ -1,1 +1,669 @@
-!function(){"use strict";var e="undefined"==typeof window?global:window;if("function"!=typeof e.require){var t={},r={},n={},a={}.hasOwnProperty,u=/^\.\.?(\/|$)/,o=function(e,t){for(var r,n=[],a=(u.test(t)?e+"/"+t:t).split("/"),o=0,i=a.length;o<i;o++)r=a[o],".."===r?n.pop():"."!==r&&""!==r&&n.push(r);return n.join("/")},i=function(e){return e.split("/").slice(0,-1).join("/")},c=function(t){return function(r){var n=o(i(t),r);return e.require(n,t)}},s=function(e,t){var n=null;n=b&&b.createHot(e);var a={id:e,exports:{},hot:n};return r[e]=a,t(a.exports,c(e),a),a.exports},l=function(e){return n[e]?l(n[e]):e},f=function(e,t){return l(o(i(e),t))},d=function(e,n){null==n&&(n="/");var u=l(e);if(a.call(r,u))return r[u].exports;if(a.call(t,u))return s(u,t[u]);throw new Error("Cannot find module '"+e+"' from '"+n+"'")};d.alias=function(e,t){n[t]=e};var p=/\.[^.\/]+$/,h=/\/index(\.[^\/]+)?$/,v=function(e){if(p.test(e)){var t=e.replace(p,"");a.call(n,t)&&n[t].replace(p,"")!==t+"/index"||(n[t]=e)}if(h.test(e)){var r=e.replace(h,"");a.call(n,r)||(n[r]=e)}};d.register=d.define=function(e,n){if("object"==typeof e)for(var u in e)a.call(e,u)&&d.register(u,e[u]);else t[e]=n,delete r[e],v(e)},d.list=function(){var e=[];for(var r in t)a.call(t,r)&&e.push(r);return e};var b=e._hmr&&new e._hmr(f,d,t,r);d._cache=r,d.hmr=b&&b.wrap,d.brunch=!0,e.require=d}}(),function(){var e;window;require.register("app.js",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}var a=t("lodash"),u=n(a),o=t("angular"),i=n(o);t("angular-ui-bootstrap");var c=t("paper"),s=n(c),l=t("ressources"),f=n(l),d=t("ecu"),p=n(d),h=t("geometry"),v=n(h),b=t("table-attente"),g=n(b),w=i["default"].module("herod",["ui.bootstrap"]);window.DEBUG=0,window.setup=!0,w.directive("ecuViewport",["$timeout",function(e){return{restrict:"A",scope:!0,link:function(t,r){function n(e,t){var r=[];return e.partition.cuts.forEach(function(n){var a=v["default"].slice(s["default"],t,n,e.table.points);r.push(a[1]),t=a[0]}),r.push(t),r.forEach(function(t,r){var n=e.children[r];n.shape=t,t.fillColor=n.couleur}),r}function a(e){if(window.setup&&(s["default"].setup(e),delete window.setup),t.ecu){var r=s["default"].PathItem.create(t.ecu.forme);r.fitBounds(s["default"].view.bounds),t.ecu.champ.table||(t.ecu.champ.table=g["default"].generateTable(s["default"],r)),t.ecu.layoutShapes=n(t.ecu.champ,r.clone()),console.log(t.ecu.layoutShapes)}s["default"].view.draw()}e(a(r[0]),0),s["default"].view.onMouseDown=function(e){var r=s["default"].project.hitTest(e.point);r&&u["default"].includes(t.ecu.layoutShapes,r.item)&&t.$apply(function(){t.ecu.selectedShape=r.item})},t.$watch("ecu.champ.partition",function(e,n){e!==n&&(s["default"].project.clear(),a(r[0]),t.ecu.selectedPart&&(t.ecu.selectedShape=t.ecu.selectedPart.shape,t.ecu.selectedShape.selected=!0))})}}}]),w.controller("EcuCtrl",function(e){e.Couleurs=f["default"].couleurs,e.Partitions=f["default"].partitions,e.ecu=new p["default"],e.$watch("ecu.selectedShape",function(t,r){t&&(r&&(r.selected=!1),t.selected=!0,e.ecu.selectedPart=u["default"].find(e.ecu.champ.children,function(e){return e.shape===t}))}),e.$watch("ecu.selectedPart.couleur",function(t){u["default"].get(e.ecu.selectedPart,"shape")&&(e.ecu.selectedPart.shape.fillColor=t)})})}),require.register("ecu.js",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var u=t("ressources"),o=n(u),i=function c(){a(this,c),this.forme=o["default"].formes.ecuFrancais,this.champ=c.testPartitionGroup,this.selectedShape=void 0,this.selectedPart=void 0};i.testPartitionGroup={partition:o["default"].partitions.ecartele,children:[{couleur:o["default"].couleurs.azur},{couleur:o["default"].couleurs.sable},{couleur:o["default"].couleurs.sable},{couleur:o["default"].couleurs.azur}]},e["default"]=i}),require.register("geometry.js",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var u=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),o=t("lodash"),i=n(o),c=function(){function e(){a(this,e)}return u(e,null,[{key:"extrapolateLine",value:function(e,t,r,n){var a=n.clone().rotate(180,r),u=new e.Path.Line(n,a),o=0,i=0;u.bounds.width>=1&&(o=(t.bounds.width+2*Math.abs(t.bounds.center.x-r.x))/u.bounds.width),u.bounds.height>=1&&(i=(t.bounds.height+2*Math.abs(t.bounds.center.y-r.y))/u.bounds.height);var c=Math.max(o,i);return u.scale(c,r)}},{key:"edgeScan",value:function(e,t,r,n){var a=this.extrapolateLine(e,t,r,n);return i["default"].map(t.getIntersections(a),"point").sort(function(e,t){return n.getDistance(t)-n.getDistance(e)})}},{key:"divideSurface2D",value:function(e,t,r){var n=this.divideSurface(e,t,r),a=e.view.bounds.topLeft;t.scale(1,-1,a).rotate(90,a);var u=this.divideSurface(e,t,r);return t.scale(1,-1,a).rotate(90,a),{x:n,y:u}}},{key:"divideSurface",value:function(e,t,r){for(var n=r-1,a=Math.abs(t.area/r),u=a/200,o=[t.bounds.left],i=1;i<=n;i++){for(var c=o[i-1],s=t.bounds.width/(r-i+1),l=new e.Size(s,t.bounds.height);;){var f=new e.Path.Rectangle(new e.Point(c,t.bounds.y),l),d=new e.Path(f.intersect(t).pathData).area,p=a-d;if(Math.abs(p)<u){o[i]=f.bounds.right;break}var h=t.getIntersections(new e.Path.Line({from:[f.bounds.right,t.bounds.top],to:[f.bounds.right,t.bounds.bottom]})),v=h[0].point.getDistance(h.reverse()[0].point);l.width+=p/v/2}o[n+1]=t.bounds.right}return o}},{key:"slice",value:function(e,t,r,n){var a=new e.Path;r.forEach(function(e){return a.add(n[e])});var u=[t.getNearestLocation(n[r[0]]),t.getNearestLocation(n[r.reverse()[0]])],o=u[1].curve,i=o.splitAt(u[1]);i===t&&(o=u[0].curve,i=o.splitAt(u[0]));var c=[t,i];return t.length<i.length&&(c=[i,t]),t.join(a.clone(),5),t.closePath(),i.join(a.clone(),5),i.closePath(),c}}]),e}();e["default"]=c}),require.register("ressources.js",function(e,t,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n={formes:{ecuFrancais:"M0,0 L0,50 Q0,80 50,110 Q100,80 100,50 L100,0 z"},couleurs:{azur:"#2b5df2",sable:"#000000",sinople:"#5ab532",pourpre:"#d576ad",or:"#fcef3c",argent:"#ffffff"},divisionModel:{axisAligned:"stripes",aroundCenter:"slices"},partitions:{parti:{cuts:[["pointChef","pointPointe"]],nameFr:["Parti"]},coupe:{cuts:[["flancDextre","flancSenestre"]],nameFr:["Coupé"]},tranche:{cuts:[["chefDextre","pointeSenestre"]],nameFr:["Tranché"]},taille:{cuts:[["chefSenestre","pointeDextre"]],nameFr:["Taillé"]},ecartele:{cuts:[["flancDextre","abyme","pointChef"],["pointChef","abyme","flancSenestre"],["flancDextre","abyme","pointPointe"]]},ecarteleSautoir:{cuts:[["chefDextre","abyme","chefSenestre"],["chefDextre","abyme","pointeDextre"],["chefSenestre","abyme","pointeSenestre"]]},tiercePairle:{cuts:[["chefDextre","abyme","chefSenestre"],["chefDextre","abyme","pointPointe"],["chefSenestre","abyme","pointPointe"]]},tiercePairleInv:{cuts:[["pointeDextre","abyme","pointChef"],["pointeSenestre","abyme","pointChef"],["pointeDextre","abyme","pointeSenestre"]]}}};e["default"]=n}),require.register("table-attente.js",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var u=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),o=t("geometry"),i=n(o),c=function(){function e(t,r){a(this,e),this.points=t,this.regions=r}return u(e,null,[{key:"generateTable",value:function(t,r){return new e(e.generatePoints(t,r),e.generateRegions(t,r))}},{key:"generatePoints",value:function(e,t){var r=i["default"].divideSurface2D(e,t,2),n=new e.Point(r.x[1],r.y[1]),a=i["default"].edgeScan(e,t,n,new e.Point(r.x[1],r.y[2])),u=i["default"].edgeScan(e,t,n,new e.Point(r.x[2],r.y[1])),o=i["default"].edgeScan(e,t,new e.Point(r.x[0],r.y[0]),n),c=i["default"].edgeScan(e,t,new e.Point(r.x[2],r.y[0]),n);return{pointChef:a[0],pointPointe:a.reverse()[0],flancDextre:u[0],flancSenestre:u.reverse()[0],chefDextre:o[0],pointeSenestre:o.reverse()[0],chefSenestre:c[0],pointeDextre:c.reverse()[0],abyme:n}}},{key:"generateRegions",value:function(e,t){for(var r=3,n=i["default"].divideSurface2D(e,t,r),a=[],u=0;u<r;u++)for(var o=n.y[u],c=n.y[u+1],s=0;s<r;s++){var l=n.x[s],f=n.x[s+1];a.push(new e.Path.Rectangle({from:[l,o],to:[f,c]}))}return a}}]),e}();e["default"]=c}),require.alias("buffer/index.js","buffer"),require.alias("process/browser.js","process"),e=require("process"),require.register("___globals___",function(e,t,r){})}(),require("___globals___"),require("app");
+(function() {
+  'use strict';
+
+  var globals = typeof window === 'undefined' ? global : window;
+  if (typeof globals.require === 'function') return;
+
+  var modules = {};
+  var cache = {};
+  var aliases = {};
+  var has = ({}).hasOwnProperty;
+
+  var expRe = /^\.\.?(\/|$)/;
+  var expand = function(root, name) {
+    var results = [], part;
+    var parts = (expRe.test(name) ? root + '/' + name : name).split('/');
+    for (var i = 0, length = parts.length; i < length; i++) {
+      part = parts[i];
+      if (part === '..') {
+        results.pop();
+      } else if (part !== '.' && part !== '') {
+        results.push(part);
+      }
+    }
+    return results.join('/');
+  };
+
+  var dirname = function(path) {
+    return path.split('/').slice(0, -1).join('/');
+  };
+
+  var localRequire = function(path) {
+    return function expanded(name) {
+      var absolute = expand(dirname(path), name);
+      return globals.require(absolute, path);
+    };
+  };
+
+  var initModule = function(name, definition) {
+    var hot = null;
+    hot = hmr && hmr.createHot(name);
+    var module = {id: name, exports: {}, hot: hot};
+    cache[name] = module;
+    definition(module.exports, localRequire(name), module);
+    return module.exports;
+  };
+
+  var expandAlias = function(name) {
+    return aliases[name] ? expandAlias(aliases[name]) : name;
+  };
+
+  var _resolve = function(name, dep) {
+    return expandAlias(expand(dirname(name), dep));
+  };
+
+  var require = function(name, loaderPath) {
+    if (loaderPath == null) loaderPath = '/';
+    var path = expandAlias(name);
+
+    if (has.call(cache, path)) return cache[path].exports;
+    if (has.call(modules, path)) return initModule(path, modules[path]);
+
+    throw new Error("Cannot find module '" + name + "' from '" + loaderPath + "'");
+  };
+
+  require.alias = function(from, to) {
+    aliases[to] = from;
+  };
+
+  var extRe = /\.[^.\/]+$/;
+  var indexRe = /\/index(\.[^\/]+)?$/;
+  var addExtensions = function(bundle) {
+    if (extRe.test(bundle)) {
+      var alias = bundle.replace(extRe, '');
+      if (!has.call(aliases, alias) || aliases[alias].replace(extRe, '') === alias + '/index') {
+        aliases[alias] = bundle;
+      }
+    }
+
+    if (indexRe.test(bundle)) {
+      var iAlias = bundle.replace(indexRe, '');
+      if (!has.call(aliases, iAlias)) {
+        aliases[iAlias] = bundle;
+      }
+    }
+  };
+
+  require.register = require.define = function(bundle, fn) {
+    if (typeof bundle === 'object') {
+      for (var key in bundle) {
+        if (has.call(bundle, key)) {
+          require.register(key, bundle[key]);
+        }
+      }
+    } else {
+      modules[bundle] = fn;
+      delete cache[bundle];
+      addExtensions(bundle);
+    }
+  };
+
+  require.list = function() {
+    var list = [];
+    for (var item in modules) {
+      if (has.call(modules, item)) {
+        list.push(item);
+      }
+    }
+    return list;
+  };
+
+  var hmr = globals._hmr && new globals._hmr(_resolve, require, modules, cache);
+  require._cache = cache;
+  require.hmr = hmr && hmr.wrap;
+  require.brunch = true;
+  globals.require = require;
+})();
+
+(function() {
+var global = window;
+var process;
+var __makeRelativeRequire = function(require, mappings, pref) {
+  var none = {};
+  var tryReq = function(name, pref) {
+    var val;
+    try {
+      val = require(pref + '/node_modules/' + name);
+      return val;
+    } catch (e) {
+      if (e.toString().indexOf('Cannot find module') === -1) {
+        throw e;
+      }
+
+      if (pref.indexOf('node_modules') !== -1) {
+        var s = pref.split('/');
+        var i = s.lastIndexOf('node_modules');
+        var newPref = s.slice(0, i).join('/');
+        return tryReq(name, newPref);
+      }
+    }
+    return none;
+  };
+  return function(name) {
+    if (name in mappings) name = mappings[name];
+    if (!name) return;
+    if (name[0] !== '.' && pref) {
+      var val = tryReq(name, pref);
+      if (val !== none) return val;
+    }
+    return require(name);
+  }
+};
+require.register("app.js", function(exports, require, module) {
+"use strict";
+
+var _lodash = require("lodash");
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _angular = require("angular");
+
+var _angular2 = _interopRequireDefault(_angular);
+
+require("angular-ui-bootstrap");
+
+var _paper = require("paper");
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _ressources = require("ressources");
+
+var _ressources2 = _interopRequireDefault(_ressources);
+
+var _ecu = require("ecu");
+
+var _ecu2 = _interopRequireDefault(_ecu);
+
+var _geometry = require("geometry");
+
+var _geometry2 = _interopRequireDefault(_geometry);
+
+var _tableAttente = require("table-attente");
+
+var _tableAttente2 = _interopRequireDefault(_tableAttente);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var app = _angular2.default.module("herod", ["ui.bootstrap"]);
+
+window.DEBUG = 0;
+
+window.setup = true;
+
+app.directive("ecuViewport", ["$timeout", function ($timeout) {
+	return {
+		restrict: "A",
+		scope: true,
+		link: function link(scope, element) {
+			function generatePartitionLayout(champ, shape) {
+				var layoutShapes = [];
+
+				champ.partition.cuts.forEach(function (cut) {
+					// TODO: destructure returnList
+					var returnList = _geometry2.default.slice(_paper2.default, shape, cut, champ.table.points);
+					layoutShapes.push(returnList[1]);
+					shape = returnList[0];
+				});
+
+				layoutShapes.push(shape);
+
+				layoutShapes.forEach(function (partShape, idx) {
+					var partObj = champ.children[idx];
+					partObj.shape = partShape;
+					partShape.fillColor = partObj.couleur;
+				});
+
+				return layoutShapes;
+			}
+
+			function debugTableAttente(paperShape) {
+				var table = _tableAttente2.default.generateTable(_paper2.default, paperShape);
+				var regions = table.regions;
+				var points = table.points;
+
+				regions.forEach(function (region, idx) {
+					region.intersect(paperShape).fillColor = '#' + idx * 11 + '' + idx * 11 + '' + idx * 11;
+				});
+
+				_lodash2.default.forIn(points, function (point, key) {
+					console.log(key + " : " + point);
+					var pointShape = new _paper2.default.Path.Circle({
+						center: point,
+						radius: 4,
+						fillColor: 'red'
+					});
+					var pointText = new _paper2.default.PointText({
+						point: point,
+						content: key,
+						fillColor: 'red',
+						fontFamily: 'Courier New',
+						fontWeight: 'bold',
+						fontSize: 12
+					});
+				});
+			}
+
+			function drawEcuOn(passedElement) {
+				if (window.setup) {
+					_paper2.default.setup(passedElement);
+					delete window.setup;
+				}
+
+				if (scope.ecu) {
+					var shape = _paper2.default.PathItem.create(scope.ecu.forme);
+					shape.fitBounds(_paper2.default.view.bounds);
+
+					if (!scope.ecu.champ.table) {
+						// TODO : Use a watch on ecu.forme instead
+						scope.ecu.champ.table = _tableAttente2.default.generateTable(_paper2.default, shape);
+					}
+
+					scope.ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape.clone());
+					console.log(scope.ecu.layoutShapes);
+
+					// debugTableAttente(shape);
+				}
+
+				_paper2.default.view.draw();
+			}
+
+			// Timeout with 0 delay, to wait for the DOM to render.
+			$timeout(drawEcuOn(element[0]), 0);
+
+			_paper2.default.view.onMouseDown = function (event) {
+				var hitResult = _paper2.default.project.hitTest(event.point);
+
+				if (hitResult && _lodash2.default.includes(scope.ecu.layoutShapes, hitResult.item)) {
+					scope.$apply(function () {
+						scope.ecu.selectedShape = hitResult.item;
+					});
+				}
+			};
+
+			scope.$watch("ecu.champ.partition", function (newVal, oldVal) {
+				if (newVal === oldVal) return;
+
+				// Redraw the whole thing on partition change
+				_paper2.default.project.clear();
+				drawEcuOn(element[0]);
+
+				if (scope.ecu.selectedPart) {
+					scope.ecu.selectedShape = scope.ecu.selectedPart.shape;
+					scope.ecu.selectedShape.selected = true;
+				}
+			});
+		}
+	};
+}]);
+
+app.controller("EcuCtrl", function ($scope) {
+	$scope.Couleurs = _ressources2.default.couleurs;
+	$scope.Partitions = _ressources2.default.partitions;
+
+	$scope.ecu = new _ecu2.default();
+
+	$scope.$watch("ecu.selectedShape", function (newVal, oldVal) {
+		if (!newVal) return; // Might be undefined when starting up
+		if (oldVal) oldVal.selected = false;
+		newVal.selected = true;
+
+		$scope.ecu.selectedPart = _lodash2.default.find($scope.ecu.champ.children, function (elem) {
+			return elem.shape === newVal;
+		});
+	});
+
+	$scope.$watch("ecu.selectedPart.couleur", function (newVal) {
+		// If selecedPart is empty, an object is created by angular with no associated shape
+		if (_lodash2.default.get($scope.ecu.selectedPart, "shape")) {
+			$scope.ecu.selectedPart.shape.fillColor = newVal;
+		}
+	});
+});
+});
+
+require.register("ecu.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _ressources = require("ressources");
+
+var _ressources2 = _interopRequireDefault(_ressources);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Ecu = function Ecu() {
+	_classCallCheck(this, Ecu);
+
+	this.forme = _ressources2.default.formes.ecuFrancais;
+	this.champ = Ecu.testPartitionGroup;
+
+	this.selectedShape = undefined; // A paper shape, added by the directive
+	this.selectedPart = undefined; // The partition represented by that shape, added by the controller
+};
+
+Ecu.testPartitionGroup = {
+	partition: _ressources2.default.partitions.ecartele,
+	// table: new TableAttente(),
+	children: [{ couleur: _ressources2.default.couleurs.azur }, { couleur: _ressources2.default.couleurs.sable }, { couleur: _ressources2.default.couleurs.sable }, { couleur: _ressources2.default.couleurs.azur }]
+};
+
+exports.default = Ecu;
+});
+
+require.register("geometry.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _lodash = require("lodash");
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Geometry = function () {
+	function Geometry() {
+		_classCallCheck(this, Geometry);
+	}
+
+	_createClass(Geometry, null, [{
+		key: "extrapolateLine",
+		value: function extrapolateLine(paper, paperShape, origin, lineEnd) {
+			var lineStart = lineEnd.clone().rotate(180, origin);
+			var line = new paper.Path.Line(lineEnd, lineStart);
+
+			var hScale = 0,
+			    vScale = 0;
+
+			if (line.bounds.width >= 1) {
+				hScale = (paperShape.bounds.width + Math.abs(paperShape.bounds.center.x - origin.x) * 2) / line.bounds.width;
+			}
+
+			if (line.bounds.height >= 1) {
+				vScale = (paperShape.bounds.height + Math.abs(paperShape.bounds.center.y - origin.y) * 2) / line.bounds.height;
+			}
+
+			var scaleFactor = Math.max(hScale, vScale);
+			return line.scale(scaleFactor, origin);
+		}
+	}, {
+		key: "edgeScan",
+		value: function edgeScan(paper, paperShape, origin, lineEnd) {
+			var line = this.extrapolateLine(paper, paperShape, origin, lineEnd);
+
+			// Return in order of the line's direction
+			return _lodash2.default.map(paperShape.getIntersections(line), "point").sort(function (point1, point2) {
+				return lineEnd.getDistance(point2) - lineEnd.getDistance(point1);
+			});
+		}
+	}, {
+		key: "divideSurface2D",
+		value: function divideSurface2D(paper, paperShape, divisionsPerAxis) {
+			// TODO: StopFinder is wrong, and doesn't actually create 9 equal shapes like we need.
+
+			var stopsX = this.divideSurface(paper, paperShape, divisionsPerAxis);
+			// Flip the shape to get the Y axis
+			var viewOrigin = paper.view.bounds.topLeft;
+			paperShape.scale(1, -1, viewOrigin).rotate(90, viewOrigin);
+
+			var stopsY = this.divideSurface(paper, paperShape, divisionsPerAxis);
+			paperShape.scale(1, -1, viewOrigin).rotate(90, viewOrigin);
+
+			return { x: stopsX, y: stopsY };
+		}
+	}, {
+		key: "divideSurface",
+		value: function divideSurface(paper, paperShape, divisionsNeeded) {
+			var stopsNeeded = divisionsNeeded - 1;
+			var targetArea = Math.abs(paperShape.area / divisionsNeeded); // Area may be negative (??)
+			var tolerence = targetArea / 200;
+			var stops = [paperShape.bounds.left];
+
+			for (var stop = 1; stop <= stopsNeeded; stop++) {
+				var regionStart = stops[stop - 1];
+				// We divide in 3, find the first stop, then the rest in half and find the second stop.
+				var estimateSize = paperShape.bounds.width / (divisionsNeeded - stop + 1);
+				var maskSize = new paper.Size(estimateSize, paperShape.bounds.height);
+
+				var i = 0;
+				while (true) {
+					var divisionMask = new paper.Path.Rectangle(new paper.Point(regionStart, paperShape.bounds.y), maskSize);
+					var estimateArea = new paper.Path(divisionMask.intersect(paperShape).pathData).area;
+					var estimateError = targetArea - estimateArea;
+
+					if (Math.abs(estimateError) < tolerence) {
+						stops[stop] = divisionMask.bounds.right;
+						break;
+					}
+
+					// Measure the cross-section width/height of our shape
+					var intersections = paperShape.getIntersections(new paper.Path.Line({
+						// We seek along the x axis, so the limit of our estimate is always on the right
+						from: [divisionMask.bounds.right, paperShape.bounds.top],
+						to: [divisionMask.bounds.right, paperShape.bounds.bottom]
+					}));
+
+					var normalWidth = intersections[0].point.getDistance(intersections.reverse()[0].point);
+					maskSize.width += estimateError / normalWidth / 2;
+				}
+				stops[stopsNeeded + 1] = paperShape.bounds.right;
+			}
+
+			return stops;
+		}
+	}, {
+		key: "slice",
+		value: function slice(paper, paperShape, cut, pointsRef) {
+			var line = new paper.Path();
+
+			cut.forEach(function (cutPoint) {
+				return line.add(pointsRef[cutPoint]);
+			});
+
+			var intersections = [paperShape.getNearestLocation(pointsRef[cut[0]]), paperShape.getNearestLocation(pointsRef[cut.reverse()[0]])];
+
+			var curve = intersections[1].curve;
+			var newPath = curve.splitAt(intersections[1]);
+
+			// Path is open but hasn't been split in 2
+			if (newPath === paperShape) {
+				curve = intersections[0].curve;
+				newPath = curve.splitAt(intersections[0]);
+			}
+
+			// First is the leftover paperShape, second is the piece we wanted
+			// The one that fills the inside of our intersections is our piece.
+			// For simplicity's sake, we use path length to guess that.
+
+			var returnList = [paperShape, newPath];
+			if (paperShape.length < newPath.length) {
+				returnList = [newPath, paperShape];
+			}
+
+			paperShape.join(line.clone(), 5);
+			paperShape.closePath();
+			newPath.join(line.clone(), 5);
+			newPath.closePath();
+
+			return returnList;
+		}
+	}]);
+
+	return Geometry;
+}();
+
+exports.default = Geometry;
+});
+
+require.register("ressources.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var R = {
+	formes: {
+		ecuFrancais: "M0,0 L0,50 Q0,80 50,110 Q100,80 100,50 L100,0 z"
+	},
+
+	couleurs: {
+		azur: "#2b5df2",
+		sable: "#000000",
+		sinople: "#5ab532",
+		pourpre: "#d576ad",
+		or: "#fcef3c",
+		argent: "#ffffff"
+	},
+
+	divisionModel: {
+		axisAligned: "stripes",
+		aroundCenter: "slices"
+	},
+
+	// divisionModel + nbDivisions + rotation
+	// partGroup = new Partition.Tierce.Pal()
+
+	partitions: {
+		parti: {
+			cuts: [["pointChef", "pointPointe"]],
+			nameFr: ["Parti"]
+		},
+		coupe: {
+			cuts: [["flancDextre", "flancSenestre"]],
+			nameFr: ["Coupé"]
+		},
+		tranche: {
+			cuts: [["chefDextre", "pointeSenestre"]],
+			nameFr: ["Tranché"]
+		},
+		taille: {
+			cuts: [["chefSenestre", "pointeDextre"]],
+			nameFr: ["Taillé"]
+		},
+		ecartele: {
+			cuts: [["flancDextre", "abyme", "pointChef"], ["pointChef", "abyme", "flancSenestre"], ["flancDextre", "abyme", "pointPointe"]]
+		},
+		ecarteleSautoir: {
+			cuts: [["chefDextre", "abyme", "chefSenestre"], ["chefDextre", "abyme", "pointeDextre"], ["chefSenestre", "abyme", "pointeSenestre"]]
+		},
+		tiercePairle: {
+			cuts: [["chefDextre", "abyme", "chefSenestre"], ["chefDextre", "abyme", "pointPointe"], ["chefSenestre", "abyme", "pointPointe"]]
+		},
+		tiercePairleInv: {
+			cuts: [["pointeDextre", "abyme", "pointChef"], ["pointeSenestre", "abyme", "pointChef"], ["pointeDextre", "abyme", "pointeSenestre"]]
+		}
+	}
+};
+
+exports.default = R;
+});
+
+require.register("table-attente.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _geometry = require("geometry");
+
+var _geometry2 = _interopRequireDefault(_geometry);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TableAttente = function () {
+	function TableAttente(points, regions) {
+		_classCallCheck(this, TableAttente);
+
+		this.points = points;
+		this.regions = regions;
+		// this.directions = {};
+	}
+
+	_createClass(TableAttente, null, [{
+		key: "generateTable",
+		value: function generateTable(paper, paperShape) {
+			return new TableAttente(TableAttente.generatePoints(paper, paperShape), TableAttente.generateRegions(paper, paperShape));
+		}
+	}, {
+		key: "generatePoints",
+		value: function generatePoints(paper, paperShape) {
+			var stops = _geometry2.default.divideSurface2D(paper, paperShape, 2);
+
+			var center = new paper.Point(stops.x[1], stops.y[1]);
+
+			var parti = _geometry2.default.edgeScan(paper, paperShape, center, new paper.Point(stops.x[1], stops.y[2]));
+			var coupe = _geometry2.default.edgeScan(paper, paperShape, center, new paper.Point(stops.x[2], stops.y[1]));
+			var tranche = _geometry2.default.edgeScan(paper, paperShape, new paper.Point(stops.x[0], stops.y[0]), center);
+			var taille = _geometry2.default.edgeScan(paper, paperShape, new paper.Point(stops.x[2], stops.y[0]), center);
+
+			return {
+				pointChef: parti[0],
+				pointPointe: parti.reverse()[0],
+
+				// Dexter and Sinister are the left and right of the bearer.
+				// They are reversed here.
+				flancDextre: coupe[0],
+				flancSenestre: coupe.reverse()[0],
+				chefDextre: tranche[0],
+				pointeSenestre: tranche.reverse()[0],
+				chefSenestre: taille[0],
+				pointeDextre: taille.reverse()[0],
+
+				abyme: center
+			};
+		}
+	}, {
+		key: "generateRegions",
+		value: function generateRegions(paper, paperShape) {
+			var divisionsPerAxis = 3;
+			var stops = _geometry2.default.divideSurface2D(paper, paperShape, divisionsPerAxis);
+
+			var regionMasks = [];
+			for (var i = 0; i < divisionsPerAxis; i++) {
+				var y1 = stops.y[i],
+				    y2 = stops.y[i + 1];
+
+				for (var j = 0; j < divisionsPerAxis; j++) {
+					var x1 = stops.x[j],
+					    x2 = stops.x[j + 1];
+
+					regionMasks.push(new paper.Path.Rectangle({
+						from: [x1, y1],
+						to: [x2, y2]
+					}));
+				}
+			}
+
+			return regionMasks;
+		}
+	}]);
+
+	return TableAttente;
+}();
+
+exports.default = TableAttente;
+});
+
+require.alias("buffer/index.js", "buffer");
+require.alias("process/browser.js", "process");process = require('process');require.register("___globals___", function(exports, require, module) {
+  
+});})();require('___globals___');
+
+require('app');
+//# sourceMappingURL=herod.js.map
