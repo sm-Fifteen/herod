@@ -45,4 +45,32 @@ Partitions = {
         ],
         nameFr: ["Taillé"],
     },
+    ecartele: {
+        cuts: [
+            ["flancDextre", "abyme", "pointChef"],
+            ["pointChef", "abyme", "flancSenestre"],
+            ["flancDextre", "abyme", "pointPointe"],
+        ]
+    },
+    ecarteleSautoir: {
+        cuts: [
+            ["chefDextre", "abyme", "chefSenestre"],
+            ["chefDextre", "abyme", "pointeDextre"],
+            ["chefSenestre", "abyme", "pointeSenestre"],
+        ]
+    },
+    tiercePairle: {
+        cuts: [
+            ["chefDextre", "abyme", "chefSenestre"],
+            ["chefDextre", "abyme", "pointPointe"],
+            ["chefSenestre", "abyme", "pointPointe"],
+        ]
+    },
+    tiercePairleInv: {
+        cuts: [
+            ["pointeDextre", "abyme", "pointChef"],
+            ["pointeSenestre", "abyme", "pointChef"],
+            ["pointeDextre", "abyme", "pointeSenestre"],
+        ]
+    },
 }

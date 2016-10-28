@@ -85,16 +85,41 @@ var divideSurface = function(paper, paperShape, divisionsNeeded) {
     return stops;
 }
 
-var slice = function(paper, paperShape, line) {
-    var intersections = paperShape.getIntersections(line);
-    var newPath;
+var slice = function(paper, paperShape, cut, pointsRef) {
+    var line = new paper.Path();
 
-    intersections.forEach(function(intersection){
-        var curve = intersection.curve;
-        newPath = curve.splitAt(intersection);
-    });
+    cut.forEach(function(cutPoint) {
+        line.add(pointsRef[cutPoint]);
+    })
 
-    paperShape.join(line.clone());
-    newPath.join(line.clone());
-    return [paperShape, newPath];
+    var intersections = [
+        paperShape.getNearestLocation(pointsRef[cut[0]]),
+        paperShape.getNearestLocation(pointsRef[cut.reverse()[0]]),
+    ];
+    
+    var curve = intersections[1].curve;
+    newPath = curve.splitAt(intersections[1]);
+
+    // Path is open but hasn't been split in 2
+    if(newPath === paperShape) {
+        var curve = intersections[0].curve;
+        newPath = curve.splitAt(intersections[0]);
+    }
+
+    // First is the leftover paperShape, second is the piece we wanted
+    // The one that fills the inside of our intersections is our piece.
+    // For simplicity's sake, we use path length to guess that.
+
+    if (paperShape.length < newPath.length) {
+        var returnList = [newPath, paperShape];
+    } else {
+        var returnList = [paperShape, newPath];
+    }
+
+    paperShape.join(line.clone(), 5);
+    paperShape.closePath();
+    newPath.join(line.clone(), 5);
+    newPath.closePath();
+
+    return returnList;
 }

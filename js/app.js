@@ -1,5 +1,7 @@
 var app = angular.module('herod', ['ui.bootstrap']);
 
+window.DEBUG = 0;
+
 app.directive("ecuViewport", ["$timeout", function($timeout) {
     return {
         restrict: 'A',
@@ -8,14 +10,13 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             function generatePartitionLayout(champ, shape) {
                 var layoutShapes = [];
 
-                var table = TableAttente.generateTable(scope.paper, shape);
-
                 champ.partition.cuts.forEach(function(cut){
-                    var point1 = table.points[cut[0]];
-                    var point2 = table.points[cut[1]];
-                    var line = new scope.paper.Path.Line(point1, point2);
-                    layoutShapes = slice(scope.paper, shape, line);
+                    var returnList = slice(scope.paper, shape, cut, champ.table.points);
+                    layoutShapes.push(returnList[1]);
+                    shape = returnList[0];
                 });
+
+                layoutShapes.push(shape);
 
                 layoutShapes.forEach(function(partShape, idx){
                     var partObj = champ.children[idx];
@@ -63,11 +64,13 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
                     var shape = scope.paper.PathItem.create(scope.ecu.forme);
                     shape.fitBounds(scope.paper.view.bounds);
 
-                    var table = TableAttente.generateTable(scope.paper, shape);
+                    if(!scope.ecu.champ.table) {
+                        // TODO : Use a watch on ecu.forme instead
+                        scope.ecu.champ.table = TableAttente.generateTable(scope.paper, shape);
+                    }
 
-                    ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape, table);
-
-                    console.log(ecu.layoutShapes);
+                    scope.ecu.layoutShapes = generatePartitionLayout(scope.ecu.champ, shape.clone());
+                    console.log(scope.ecu.layoutShapes);
 
                     //debugTableAttente(shape);
                 }
@@ -82,12 +85,16 @@ app.directive("ecuViewport", ["$timeout", function($timeout) {
             paper.view.onMouseDown = function(event){
                 var hitResult = paper.project.hitTest(event.point);
 
-                if (hitResult) scope.$apply(function() {
-                    scope.ecu.selectedShape = hitResult.item;
-                });
+                if (hitResult && _.includes(scope.ecu.layoutShapes, hitResult.item)){
+                    scope.$apply(function() {
+                        scope.ecu.selectedShape = hitResult.item;
+                    });
+                }
             }
 
-            scope.$watch("ecu.champ.partition", function(newVal) {
+            scope.$watch("ecu.champ.partition", function(newVal, oldVal) {
+                if(newVal === oldVal) return;
+
                 //Redraw the whole thing on partition change
                 scope.paper.project.clear();
                 drawEcuOn(element[0]);
@@ -108,8 +115,9 @@ app.controller('EcuCtrl', function($scope) {
     $scope.ecu = new Ecu();
 
     $scope.$watch("ecu.selectedShape", function(newVal, oldVal){
+        if (!newVal) return; // Might be undefined when starting up
         if (oldVal) oldVal.selected = false;
-        if (newVal) newVal.selected = true; // Might be undefined when starting up
+        newVal.selected = true;
 
         $scope.ecu.selectedPart = _.find($scope.ecu.champ.children, function(elem){
             return elem.shape === newVal;
