@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/css/main.css"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA","file":"docs/herod.css","sourcesContent":["#ecu-container {\n\twidth: 100%;\n\tmax-width: 28em;\n\tmargin: auto;\n\tpadding: 2em;\n}\n\ncanvas#ecu {\n\twidth: 100%;\n\tmargin: auto;\n}\n"]}

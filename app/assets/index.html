@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Now you're slaying dragons with style!">
+
+	<title>Herod</title>
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/herod.css">
+	<script src="/vendor.js"></script>
+	<script src="/herod.js"></script>
+</head>
+<body ng-app="herod">
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<span class="navbar-brand">Herod</span>
+				<p class="navbar-text"><em>Now you're slaying dragons with style!</em></p>
+			</div>
+		</div>
+	</nav>
+
+	<div ng-controller="EcuCtrl" class="container-fluid">
+		<div class="col-md-6">
+			<div id="ecu-container">
+				<canvas id="ecu" ecu-viewport></canvas>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Couleur</h3>
+					</div>
+					<div class="panel-body">
+						<div class="btn-group">
+							<label ng-repeat="(name, hex) in Couleurs" class="btn btn-default" ng-model="ecu.selectedPart.couleur" ng-disabled="!ecu.selectedPart" uib-btn-radio="hex">{{name}}</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Partition</h3>
+					</div>
+					<div class="panel-body">
+						<div class="btn-group">
+							<label ng-repeat="(name, part) in Partitions" class="btn btn-default" ng-model="ecu.champ.partition" uib-btn-radio="part">{{name}}</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
