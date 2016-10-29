@@ -1,4 +1,4 @@
-var extrapolateLine = function(paper, paperShape, origin, lineEnd){
+function extrapolateLine(paper, paperShape, origin, lineEnd){
 	var lineStart = lineEnd.clone().rotate(180, origin);
 	var line = new paper.Path.Line(lineEnd, lineStart);
 
@@ -18,7 +18,7 @@ var extrapolateLine = function(paper, paperShape, origin, lineEnd){
 	return line.scale(scaleFactor, origin);
 }
 
-var edgeScan = function(paper, paperShape, origin, lineEnd){
+function edgeScan(paper, paperShape, origin, lineEnd){
 	var line = extrapolateLine(paper, paperShape, origin, lineEnd);
 
 	// Return in order of the line's direction
@@ -27,7 +27,7 @@ var edgeScan = function(paper, paperShape, origin, lineEnd){
 	});
 }
 
-var divideSurface2D = function(paper, paperShape, divisionsPerAxis){
+function divideSurface2D(paper, paperShape, divisionsPerAxis){
 	// TODO: StopFinder is wrong, and doesn't actually create 9 equal shapes like we need.
 
 	var stopsX = divideSurface(paper, paperShape, divisionsPerAxis);
@@ -44,7 +44,7 @@ var divideSurface2D = function(paper, paperShape, divisionsPerAxis){
 	}
 }
 
-var divideSurface = function(paper, paperShape, divisionsNeeded) {
+function divideSurface(paper, paperShape, divisionsNeeded) {
 	var stopsNeeded = divisionsNeeded-1;
 	var targetArea = Math.abs(paperShape.area/divisionsNeeded); // Area may be negative (??)
 	var tolerence = targetArea/200;
@@ -85,7 +85,7 @@ var divideSurface = function(paper, paperShape, divisionsNeeded) {
 	return stops;
 }
 
-var slice = function(paper, paperShape, cut, pointsRef) {
+function slice(paper, paperShape, cut, pointsRef) {
 	var line = new paper.Path();
 
 	cut.forEach(function(cutPoint) {
