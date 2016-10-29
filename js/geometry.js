@@ -1,24 +1,22 @@
-function extrapolateLine(paper, paperShape, origin, lineEnd){
+function extrapolateLine(paper, paperShape, origin, lineEnd) {
 	var lineStart = lineEnd.clone().rotate(180, origin);
 	var line = new paper.Path.Line(lineEnd, lineStart);
 
-	if(line.bounds.width >= 1) {
-		var hScale = (paperShape.bounds.width + Math.abs(paperShape.bounds.center.x - origin.x)*2)/line.bounds.width;
-	} else {
-		var hScale = 0;
+	var hScale = 0;
+	if (line.bounds.width >= 1) {
+		hScale = (paperShape.bounds.width + Math.abs(paperShape.bounds.center.x - origin.x)*2)/line.bounds.width;
 	}
 
-	if(line.bounds.height >= 1) {
-		var vScale = (paperShape.bounds.height + Math.abs(paperShape.bounds.center.y - origin.y)*2)/line.bounds.height;
-	} else {
-		var vScale = 0;
+	var vScale = 0;
+	if (line.bounds.height >= 1) {
+		vScale = (paperShape.bounds.height + Math.abs(paperShape.bounds.center.y - origin.y)*2)/line.bounds.height;
 	}
 
 	var scaleFactor = Math.max(hScale, vScale);
 	return line.scale(scaleFactor, origin);
 }
 
-function edgeScan(paper, paperShape, origin, lineEnd){
+function edgeScan(paper, paperShape, origin, lineEnd) {
 	var line = extrapolateLine(paper, paperShape, origin, lineEnd);
 
 	// Return in order of the line's direction
