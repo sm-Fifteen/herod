@@ -1,14 +1,14 @@
 {
   "name": "herod",
+  "description": "Now you're slaying dragons with style!",
   "authors": [
     "Alexandre Gagnon <alxgnon@linux.com>",
     "Nicolas Roy-Renaud <nroyrenaud@linux.com>"
   ],
-  "description": "",
   "main": "",
   "moduleType": [],
   "license": "GPL3",
-  "homepage": "",
+  "homepage": "http://alxgnon.com/herod/",
   "private": true,
   "ignore": [
     "**/.*",
