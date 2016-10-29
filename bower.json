@@ -1,27 +1,27 @@
 {
-  "name": "herod",
-  "description": "Now you're slaying dragons with style!",
-  "authors": [
-    "Alexandre Gagnon <alxgnon@linux.com>",
-    "Nicolas Roy-Renaud <nroyrenaud@linux.com>"
-  ],
-  "main": "",
-  "moduleType": [],
-  "license": "GPL3",
-  "homepage": "http://alxgnon.com/herod/",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "paper": "~0.10.2",
-    "jquery": "^2.2.0",
-    "angular-bootstrap": "^1.1.1",
-    "angular": "angularjs#^1.4.9",
-    "lodash": "^4.1.0"
-  }
+	"name": "herod",
+	"description": "Now you're slaying dragons with style!",
+	"authors": [
+		"Alexandre Gagnon <alxgnon@linux.com>",
+		"Nicolas Roy-Renaud <nroyrenaud@linux.com>"
+	],
+	"main": "",
+	"moduleType": [],
+	"license": "GPL3",
+	"homepage": "http://alxgnon.com/herod/",
+	"private": true,
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+		"paper": "~0.10.2",
+		"jquery": "^2.2.0",
+		"angular-bootstrap": "^1.1.1",
+		"angular": "angularjs#^1.4.9",
+		"lodash": "^4.1.0"
+	}
 }
