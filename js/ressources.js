@@ -12,14 +12,6 @@ Couleurs = {
 	Argent: '#ffffff'
 };
 
-DivisionModel = {
-	AxisAligned : "stripes",
-	AroundCenter : "slices",
-}
-
-//divisionModel + nbDivisions + rotation
-//partGroup = new Partition.Tierce.Pal()
-
 Partitions = {
 	parti: {
 		cuts: [
