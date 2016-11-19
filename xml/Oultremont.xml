@@ -1,0 +1,12 @@
+<!-- goo.gl/sLGlZx - coupé de gueules sur sable au lion d'argent armé, lampassé et couronné d'or -->
+<blazon>
+  <ecu forme="ancien">
+    <champ>
+      <partition type="coupé">
+        <quartier couleur="gueules" />
+        <quartier couleur="sable" />
+      </partition>
+      <lion couleur="argent" lampassé="or" armé="or" couronné="or" />
+    </champ>
+  </ecu>
+</blazon>

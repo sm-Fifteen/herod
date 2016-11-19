@@ -1,0 +1,9 @@
+<!-- goo.gl/sLGlZx - d'azur au lion d'or, lampassé, armé et vilené de gueules, surmonté d'une couronne d'argent -->
+<blazon>
+  <ecu forme="ancien">
+    <champ couleur="azur">
+      <lion couleur="or" lampassé="gueules" armé="gueules" vilené="gueules" />
+      <!-- TODO: surmonté d'une couronne d'argent ?? -->
+    </champ>
+  </ecu>
+</blazon>
