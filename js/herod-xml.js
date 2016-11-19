@@ -6,7 +6,7 @@
 // or outright delegate what's valid and what's not to the data model.
 
 var parser = new DOMParser();
-var testXmlDocument = parser.parseFromString('<blazon my-attr="foo"></blazon>', "application/xml");
+var testXmlDocument = parser.parseFromString("<blazon my-attr='foo'><bar></bar></blazon>", "application/xml");
 
 function readHerodXml(xmlDocument) {
 	if (xmlDocument.childElementCount == 1) {

@@ -2,14 +2,36 @@ function Blazon() {
 
 }
 
-Blazon.validChildren = [];
-Blazon.validAttributes = [];
+Blazon.validChildren = {
+	'foo': function(childNode) {
+
+	}
+};
+
+Blazon.validAttributes = {
+	'my-attr': function(value) {
+
+	}
+};
 
 Blazon.generateFromDOM = function(domNode) {
-	//domNode.attributes.getNamedItem("foo");
-	//domNode.attributes.removeNamedItem("foo");
+	for(var i = 0; i < domNode.attributes.length; i++) {
+		var attr = domNode.attributes[i];
 
-	if(domNode.attributes.length > 0) {
-		console.warn("Blazon element with " + domNode.attributes.length + " unknown attributes.");
+		if(Blazon.validAttributes.hasOwnProperty(attr.name)) {
+			Blazon.validAttributes[attr.name](attr.value);
+		} else {
+			console.warn("Blazon element with unknown attribute '" + attr.name + "'.");
+		}
+	}
+
+	for(var i = 0; i < domNode.children.length; i++) {
+		var child = domNode.children[i];
+
+		if(Blazon.validChildren.hasOwnProperty(child.tagName)) {
+			Blazon.validChildren[child.tagName](child);
+		} else {
+			console.warn("Blazon element with unknown child '" + child.tagName + "'.");
+		}
 	}
 }
