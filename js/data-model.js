@@ -28,6 +28,12 @@ HerodElement.prototype.generateFromDOM = function(domNode) {
 	}
 }
 
+HerodElement.generateFromDOM = function(domNode) {
+	var newNode = new this();
+	newNode.generateFromDOM(domNode);
+	return newNode;
+}
+
 function Blazon() {
 
 }
@@ -35,6 +41,7 @@ function Blazon() {
 Blazon.prototype = new HerodElement();
 Blazon.prototype.constructor = Blazon;
 Blazon.prototype.nodeName = "blazon";
+Blazon.generateFromDOM = HerodElement.generateFromDOM;
 
 Blazon.prototype.validChildren['foo'] = function(childNode) {
 	// this.children.push(new Foo(childNode));
@@ -42,10 +49,4 @@ Blazon.prototype.validChildren['foo'] = function(childNode) {
 
 Blazon.prototype.validAttributes['my-attr'] = function(value) {
 	// this.attr = value;
-}
-
-Blazon.generateFromDOM = function(domNode) {
-	var newNode = new Blazon();
-	newNode.generateFromDOM(domNode);
-	return newNode;
 }
