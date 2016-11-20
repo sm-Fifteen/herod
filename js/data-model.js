@@ -1,37 +1,51 @@
-function Blazon() {
+function HerodElement() {
 
 }
 
-Blazon.validChildren = {
-	'foo': function(childNode) {
+HerodElement.nodeName = "";
+HerodElement.prototype.validChildren = Object.create(null);
+HerodElement.prototype.validAttributes = Object.create(null);
 
-	}
-};
-
-Blazon.validAttributes = {
-	'my-attr': function(value) {
-
-	}
-};
-
-Blazon.generateFromDOM = function(domNode) {
+HerodElement.prototype.generateFromDOM = function(domNode) {
 	for(var i = 0; i < domNode.attributes.length; i++) {
 		var attr = domNode.attributes[i];
 
-		if(Blazon.validAttributes.hasOwnProperty(attr.name)) {
-			Blazon.validAttributes[attr.name](attr.value);
+		if(attr.name in this.validAttributes) {
+			this.validAttributes[attr.name](attr.value);
 		} else {
-			console.warn("Blazon element with unknown attribute '" + attr.name + "'.");
+			console.warn("'" + this.nodeName + "' element with unknown attribute '" + attr.name + "'.");
 		}
 	}
 
 	for(var i = 0; i < domNode.children.length; i++) {
 		var child = domNode.children[i];
 
-		if(Blazon.validChildren.hasOwnProperty(child.tagName)) {
-			Blazon.validChildren[child.tagName](child);
+		if(child.tagName in this.validChildren) {
+			this.validChildren[child.tagName](child);
 		} else {
-			console.warn("Blazon element with unknown child '" + child.tagName + "'.");
+			console.warn("'" + this.nodeName + "' element with unknown child '" + child.tagName + "'.");
 		}
 	}
+}
+
+function Blazon() {
+
+}
+
+Blazon.prototype = new HerodElement();
+Blazon.prototype.constructor = Blazon;
+Blazon.prototype.nodeName = "blazon";
+
+Blazon.prototype.validChildren['foo'] = function(childNode) {
+	// this.children.push(new Foo(childNode));
+}
+
+Blazon.prototype.validAttributes['my-attr'] = function(value) {
+	// this.attr = value;
+}
+
+Blazon.generateFromDOM = function(domNode) {
+	var newNode = new Blazon();
+	newNode.generateFromDOM(domNode);
+	return newNode;
 }
