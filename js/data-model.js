@@ -34,17 +34,21 @@ HerodElement.generateFromDOM = function(domNode) {
 	return newNode;
 }
 
+function dataModelBoilerplate(NewConstructor) {
+	NewConstructor.validChildren = Object.create(NewConstructor.prototype.constructor.validChildren);
+	NewConstructor.validAttributes = Object.create(NewConstructor.prototype.constructor.validAttributes);
+	NewConstructor.prototype.constructor = NewConstructor;
+	NewConstructor.generateFromDOM = HerodElement.generateFromDOM;
+}
 
 function Blazon() {
 	this.ecu = undefined;
 }
 
 Blazon.prototype = new HerodElement();
-Blazon.validChildren = Object.create(Blazon.prototype.constructor.validChildren);
-Blazon.validAttributes = Object.create(Blazon.prototype.constructor.validAttributes);
-Blazon.prototype.constructor = Blazon;
 Blazon.prototype.nodeName = "blazon";
-Blazon.generateFromDOM = HerodElement.generateFromDOM;
+dataModelBoilerplate(Blazon);
+
 
 Blazon.validChildren['ecu'] = function(childNode) {
 	this.ecu = Ecu.generateFromDOM(childNode);
@@ -57,16 +61,58 @@ function Ecu() {
 }
 
 Ecu.prototype = new HerodElement();
-Ecu.validChildren = Object.create(Ecu.prototype.constructor.validChildren);
-Ecu.validAttributes = Object.create(Ecu.prototype.constructor.validAttributes);
-Ecu.prototype.constructor = Ecu;
 Ecu.prototype.nodeName = "ecu";
-Ecu.generateFromDOM = HerodElement.generateFromDOM;
+dataModelBoilerplate(Ecu);
 
 Ecu.validChildren['champ'] = function(childNode) {
-	this.champ = new Object();
+	this.champ = Champ.generateFromDOM(childNode);
 }
 
 Ecu.validAttributes['forme'] = function(value) {
 	this.forme = value;
+}
+
+
+function Quartier() {
+	this.couleur = undefined; // Components is always ignored if a color is set
+	this.components = []; // Includes partitions but also ordinaries
+}
+
+Quartier.prototype = new HerodElement();
+Quartier.prototype.nodeName = "quartier";
+dataModelBoilerplate(Quartier);
+
+Quartier.validChildren['partition'] = function(childNode) {
+	this.components.push(Partition.generateFromDOM(childNode));
+}
+
+Quartier.validAttributes['couleur'] = function(value) {
+	this.couleur = value;
+}
+
+
+function Champ() {
+	// Just a special copy of quartier for now, no special children or attributes
+}
+
+Champ.prototype = new Quartier();
+Champ.prototype.nodeName = "champ";
+dataModelBoilerplate(Champ);
+
+
+function Partition() {
+	this.division = undefined;
+	this.children = [];
+}
+
+Partition.prototype = new HerodElement();
+Partition.prototype.nodeName = "partition";
+dataModelBoilerplate(Partition);
+
+Partition.validChildren['quartier'] = function(childNode) {
+	this.children.push(Quartier.generateFromDOM(childNode));
+}
+
+Partition.validAttributes['division'] = function(value) {
+	this.division = value;
 }
