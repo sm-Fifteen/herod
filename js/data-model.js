@@ -11,7 +11,7 @@ HerodElement.prototype.generateFromDOM = function(domNode) {
 		var attr = domNode.attributes[i];
 
 		if(attr.name in this.constructor.validAttributes) {
-			this.constructor.validAttributes[attr.name](attr.value);
+			this.constructor.validAttributes[attr.name].call(this, attr.value);
 		} else {
 			console.warn("'" + this.nodeName + "' element with unknown attribute '" + attr.name + "'.");
 		}
@@ -21,7 +21,7 @@ HerodElement.prototype.generateFromDOM = function(domNode) {
 		var child = domNode.children[i];
 
 		if(child.tagName in this.constructor.validChildren) {
-			this.constructor.validChildren[child.tagName](child);
+			this.constructor.validChildren[child.tagName].call(this, child);
 		} else {
 			console.warn("'" + this.nodeName + "' element with unknown child '" + child.tagName + "'.");
 		}
@@ -34,8 +34,9 @@ HerodElement.generateFromDOM = function(domNode) {
 	return newNode;
 }
 
-function Blazon() {
 
+function Blazon() {
+	this.ecu = undefined;
 }
 
 Blazon.prototype = new HerodElement();
@@ -45,11 +46,27 @@ Blazon.prototype.constructor = Blazon;
 Blazon.prototype.nodeName = "blazon";
 Blazon.generateFromDOM = HerodElement.generateFromDOM;
 
-
-Blazon.validChildren['foo'] = function(childNode) {
-	// this.children.push(new Foo(childNode));
+Blazon.validChildren['ecu'] = function(childNode) {
+	this.ecu = Ecu.generateFromDOM(childNode);
 }
 
-Blazon.validAttributes['my-attr'] = function(value) {
-	// this.attr = value;
+
+function Ecu() {
+	this.forme = undefined;
+	this.champ = undefined;
+}
+
+Ecu.prototype = new HerodElement();
+Ecu.validChildren = Object.create(Ecu.prototype.constructor.validChildren);
+Ecu.validAttributes = Object.create(Ecu.prototype.constructor.validAttributes);
+Ecu.prototype.constructor = Ecu;
+Ecu.prototype.nodeName = "ecu";
+Ecu.generateFromDOM = HerodElement.generateFromDOM;
+
+Ecu.validChildren['champ'] = function(childNode) {
+	this.champ = new Object();
+}
+
+Ecu.validAttributes['forme'] = function(value) {
+	this.forme = value;
 }
